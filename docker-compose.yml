@@ -1,0 +1,44 @@
+version: "3.3"
+services:
+  nodeclient:
+    container_name: nodeclient
+    build:
+      context: ./
+      dockerfile: ./docker/dockerfile
+    restart: always
+    ports:
+        - "4000:7000"
+    networks:
+      - app-network
+    volumes:
+        - ./client/crypto-graph:/home/node/app/client/crypto-graph
+    command: bash -c "cd /home/node/app/client/crypto-graph && npm start"
+
+  nodeserv:
+    container_name: nestserv
+    build:
+      context: ./
+      dockerfile: ./docker/dockerfile
+    restart: always
+    ports:
+        - "4100:7100"
+    networks:
+      - app-network
+    volumes:       
+      - ./server/crypto-graph-serv:/home/node/app/server/crypto-graph-serv
+    command: bash -c "cd /home/node/app/server/crypto-graph-serv && npm run start:dev"
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: dev
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge        
