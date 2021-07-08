@@ -2,7 +2,7 @@
 
 export default interface ISuccessSessionResponse {
     // session: ISession
-    email: string
+    access_token: string
     // firstName: string
     // lastName: string
     // isActive: boolean,

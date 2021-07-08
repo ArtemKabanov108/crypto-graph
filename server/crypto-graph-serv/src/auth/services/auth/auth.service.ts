@@ -3,6 +3,7 @@ import {LoginDto, RegisterDto} from "../../dto/auth.dto";
 import {ConfigService} from "@nestjs/config";
 import ISuccessSessionResponse from "../../../common/interfaces";
 import {UserService} from "../../../user/user.service";
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 export interface IRegistrationResponse {
@@ -20,7 +21,8 @@ export class AuthService {
 
     constructor(
         private configService: ConfigService,
-        private userService: UserService
+        private userService: UserService,
+        private jwtService: JwtService
     ) {
     }
 
@@ -59,7 +61,6 @@ export class AuthService {
             const valid = await this.validateUser(email, password)
 
             if (valid === null) {
-                console.log("valid valid valid", valid)
                 // const {user:{id, profile:{firstName, lastName}, }} = await this.oktaAuthClient.signIn({username: email, password});
                 await this.userService.create({
                     email,
@@ -89,24 +90,13 @@ export class AuthService {
             //     status
             // } = await this.oktaClient.createSession({sessionToken});
             // let {profile} = await this.oktaClient.getUser(userId)
-            let result = await this.userService.findByEmail(email)
-
-            return {
-                email: result.email
-                // session: {
-                //     sessionId,
-                //     createdAt,
-                //     expiresAt,
-                //     status
-                // },
-                // email: profile.email,
-                // firstName: profile.firstName,
-                // lastName: profile.lastName,
-                // role: profile.userType,
-                // isActive,
-                // city,
-                // country
-
+            let user = await this.userService.findByEmail(email)
+            const credsIsMatch = await this.validateUser(email, password)
+            console.log("user user user user", typeof user)
+            if(credsIsMatch){
+                return {
+                    access_token: this.jwtService.sign(user),
+                };
             }
         } catch (err) {
             throw new BadRequestException([err.message])

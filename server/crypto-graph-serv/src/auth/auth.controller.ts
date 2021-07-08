@@ -53,6 +53,7 @@ constructor(private authService: AuthService ) {}
 
     async register(@Body() body: RegisterDto, @Res() response: Response): Promise<Response> {
         const result = await this.authService.register(body)
+        console.log("auth controller register", result)
         if(!result)
             throw new BadRequestException(['Register Error'])
         // response.cookie('sessionId', result.session.sessionId)
