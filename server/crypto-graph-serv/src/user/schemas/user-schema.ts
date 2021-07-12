@@ -19,9 +19,9 @@ export class User {
     @Prop()
     password: string
 
-    //
-    // @Prop()
-    // city: string;
+
+    @Prop()
+    watchlist: string[];
     //
     // @Prop()
     // country: string;

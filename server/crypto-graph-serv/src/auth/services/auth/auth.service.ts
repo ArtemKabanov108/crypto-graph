@@ -5,6 +5,7 @@ import ISuccessSessionResponse from "../../../common/interfaces";
 import {UserService} from "../../../user/user.service";
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import IUser from "../../../common/interfaces";
 
 export interface IRegistrationResponse {
     id: string;
@@ -65,6 +66,7 @@ export class AuthService {
                 await this.userService.create({
                     email,
                     password: hash,
+                    watchlist: [],
                     createAt: Date.now().toString(),
                 })
             } else {
@@ -92,11 +94,23 @@ export class AuthService {
             // let {profile} = await this.oktaClient.getUser(userId)
             let user = await this.userService.findByEmail(email)
             const credsIsMatch = await this.validateUser(email, password)
-            console.log("user user user user", typeof user)
             if(credsIsMatch){
                 return {
-                    access_token: this.jwtService.sign(user),
+                    access_token: await this.jwtService.sign({user}),
                 };
+            }
+        } catch (err) {
+            throw new BadRequestException([err.message])
+        }
+    }
+
+    async getUser(loginData: LoginDto): Promise<IUser> {
+        const {email, password} = loginData;
+        try {
+            let user = await this.userService.findByEmail(email)
+            const credsIsMatch = await this.validateUser(email, password)
+            if(credsIsMatch){
+                return user
             }
         } catch (err) {
             throw new BadRequestException([err.message])

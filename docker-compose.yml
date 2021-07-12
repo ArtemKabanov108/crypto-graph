@@ -24,7 +24,7 @@ services:
         - "4100:7100"
     networks:
       - app-network
-    volumes:       
+    volumes:
       - ./server/crypto-graph-serv:/home/node/app/server/crypto-graph-serv
     command: bash -c "cd /home/node/app/server/crypto-graph-serv && npm run start:dev"
 

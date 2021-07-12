@@ -17,6 +17,10 @@ export class CreateUserDto {
 
     @ApiProperty()
     @IsNotEmpty()
+    watchlist: string[];
+
+    @ApiProperty()
+    @IsNotEmpty()
     @IsString()
     createAt: string;
 

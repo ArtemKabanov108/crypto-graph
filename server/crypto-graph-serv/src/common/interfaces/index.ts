@@ -11,6 +11,12 @@ export default interface ISuccessSessionResponse {
     // role: string
 }
 
+export interface IUser {
+    email: string
+    createAt: string
+    watchlist: string[]
+}
+
 export interface ISession {
     sessionId: string,
     createdAt: string,

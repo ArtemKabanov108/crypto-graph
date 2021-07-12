@@ -7,6 +7,7 @@ import {Response} from "express";
 import ISuccessSessionResponse from "../common/interfaces";
 import {SuccessSessionResponseObject} from "../common/objects/SuccessSessionResponseObject";
 import {AuthGuard} from "@nestjs/passport";
+import {JwtAuthGuard} from "./guards/jwt-auth.guard";
 
 @ApiBearerAuth()
 @ApiTags('auth')
@@ -28,11 +29,14 @@ constructor(private authService: AuthService ) {}
         description: 'Success login',
         type: SuccessSessionResponseObject,
     })
+
     async login(@Body() LoginDto: LoginDto, @Res() response: Response):Promise<Response> {
         const result = await this.authService.login(LoginDto);
-        if(!result)
+        console.log(result)
+        if(!result){
             throw new BadRequestException(['Register Error'])
-        // response.cookie('sessionId', result.session.sessionId)
+        }
+        response.cookie('accessToken', result)
         return response.status(HttpStatus.OK).json(result)
     }
 
@@ -56,10 +60,31 @@ constructor(private authService: AuthService ) {}
         console.log("auth controller register", result)
         if(!result)
             throw new BadRequestException(['Register Error'])
-        // response.cookie('sessionId', result.session.sessionId)
+
+        response.cookie('accessToken', result.access_token)
         return response.status(HttpStatus.OK).json(result)
     }
 
-
+    @UseGuards(JwtAuthGuard)
+    @Post('get-user')
+    @ApiOperation({ summary: 'Logged user.' })
+    @ApiResponse({
+        status: 400,
+        description: 'Bad request error',
+        type: ValidationErrorObject
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'Success login',
+        type: SuccessSessionResponseObject,
+    })
+    async getUser(@Body() LoginDto: LoginDto, @Res() response: Response):Promise<any> {
+        const result = await this.authService.getUser(LoginDto);
+        if (!result) {
+            throw new BadRequestException(['Register Error'])
+        }
+        console.log("555555555555555", result)
+        return response.status(HttpStatus.OK).json(result)
+    }
 }
 
