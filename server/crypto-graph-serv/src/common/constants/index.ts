@@ -1,8 +1,10 @@
-import {UserRole} from "../types";
-require('dotenv/config')
-const {JWT_SECRET_KEY} = process.env
+import { UserRole } from '../types';
+//commented for developing
+// require('dotenv/config')
+// const {JWT_SECRET_KEY} = process.env
 
-export const APP_ROLES_ALL: UserRole[] = ['student', "teacher", "parent", "admin", "mentor"];
-export const jwtConstants = {
-    secret: JWT_SECRET_KEY,
-};
+export const APP_ROLES_ALL: UserRole[] = ['user', 'admin'];
+//commented for developing
+// export const jwtConstants = {
+//     secret: JWT_SECRET_KEY,
+// };

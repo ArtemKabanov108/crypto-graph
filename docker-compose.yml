@@ -3,8 +3,8 @@ services:
   nodeclient:
     container_name: nodeclient
     build:
-      context: ./
-      dockerfile: ./docker/dockerfile
+      context: ""
+      dockerfile: ../../docker/dockerfile
     restart: always
     ports:
         - "4000:7000"
@@ -17,8 +17,8 @@ services:
   nodeserv:
     container_name: nestserv
     build:
-      context: ./
-      dockerfile: ./docker/dockerfile
+      context: ""
+      dockerfile: ../../docker/dockerfile
     restart: always
     ports:
         - "4100:7100"
@@ -33,8 +33,10 @@ services:
     container_name: mongo
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: dev
-      MONGO_INITDB_ROOT_PASSWORD: 123456
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
+    ports:
+      - 27017:27017
     networks:
       - app-network
 

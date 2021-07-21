@@ -1,21 +1,28 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import {DocumentBuilder, SwaggerCustomOptions, SwaggerModule} from "@nestjs/swagger";
-import {ValidationPipe} from "@nestjs/common";
+import {
+  DocumentBuilder,
+  SwaggerCustomOptions,
+  SwaggerModule,
+} from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 // import customOptions from "./common/swaggerOptions"
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
+  const configService = app.get(ConfigService);
 
   const config = new DocumentBuilder()
-      .setTitle('API Earth-size')
-      .setDescription('The Earth-size API description')
-      .setVersion('1.0')
-      .addBearerAuth(
-          { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-          'access-token',)
-      .build();
+    .setTitle('API Earth-size')
+    .setDescription('The Earth-size API description')
+    .setVersion('1.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'access-token',
+    )
+    .build();
 
   const document = SwaggerModule.createDocument(app, config);
 
@@ -30,6 +37,6 @@ async function bootstrap() {
 
   SwaggerModule.setup('api-doc', app, document, customOptions);
 
-  await app.listen(7100);
+  await app.listen(configService.get('server.port'));
 }
 bootstrap();
