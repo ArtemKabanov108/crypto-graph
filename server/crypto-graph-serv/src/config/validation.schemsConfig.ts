@@ -1,7 +1,7 @@
 import { object, string, number } from 'joi';
 /**
  * Envs validation schema
- * @returns object typeof @hapi/joi object
+ * @returns object typeof joi object
  */
 export const createValidationSchema = () =>
   object({
