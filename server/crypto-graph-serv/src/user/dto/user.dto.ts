@@ -1,28 +1,33 @@
-import {IsBoolean, IsEmail, IsIn, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested} from 'class-validator';
-import {APP_ROLES_ALL} from "../../common/constants";
-import {UserRole} from "../../common/types";
-import {Type} from "class-transformer";
-import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
-import {Prop} from "@nestjs/mongoose";
+import {IsEmail, IsMongoId, IsNotEmpty, IsString} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { Prop } from '@nestjs/mongoose';
+import { UserRole } from '../../common/types';
 
 export class CreateUserDto {
+  @ApiProperty()
+  @IsMongoId()
+  _id: any;
 
-    @ApiProperty()
-    @IsEmail()
-    email: string;
+  @ApiProperty()
+  @IsEmail()
+  email: string;
 
-    @ApiProperty()
-    @IsNotEmpty()
-    password: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  password: string;
 
-    @ApiProperty()
-    @IsNotEmpty()
-    watchlist: string[];
+  @ApiProperty()
+  @IsNotEmpty()
+  watchlist: string[];
 
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    createAt: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  role: UserRole
 
+  // checking schema....
+  // @ApiProperty()
+  // @IsNotEmpty()
+  // @IsString()
+  // @ApiProperty()
+  // @Prop({ type: Date, required: true })
 }
-

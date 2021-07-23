@@ -1,18 +1,22 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { UserRole } from '../../common/types';
 
 export type CryptoDocument = User & Document;
 
-@Schema()
+@Schema({
+  timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
+})
 export class User {
-
   // TODO
   // @Prop()
   // firstName: string;
   //TODO
   // @Prop()
   // lastName: string;
+
+  @Prop()
+  _id: Types.ObjectId;
 
   @Prop()
   email: string;
@@ -23,15 +27,12 @@ export class User {
   @Prop()
   watchlist: string[];
 
-  //TODO
-  // @Prop([String])
-  // role: UserRole
+  @Prop()
+  role: UserRole;
+
   //TODO
   // @Prop()
   // isActive: boolean
-
-  @Prop()
-  createAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

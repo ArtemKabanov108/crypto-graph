@@ -18,7 +18,7 @@ import { createValidationSchema } from './validation.schemsConfig';
     MongooseModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService) => ({
-        uri: configService.get('db.dbHost'),
+        uri: configService.get('db.host'),
         //variant connect
         // uri: dbConfig().dbHost
       }),

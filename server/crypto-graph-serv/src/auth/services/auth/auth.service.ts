@@ -9,7 +9,8 @@ import ISuccessSessionResponse from '../../../common/interfaces';
 import { UserService } from '../../../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import IUser from '../../../common/interfaces';
+import { IUser } from '../../../common/interfaces';
+import {Types} from "mongoose";
 
 export interface IRegistrationResponse {
   id: string;
@@ -66,23 +67,33 @@ export class AuthService {
       if (valid === null) {
         // const {user:{id, profile:{firstName, lastName}, }} = await this.oktaAuthClient.signIn({username: email, password});
         await this.userService.create({
+          _id: Types.ObjectId,
           email,
           password: hash,
           watchlist: [],
-          createAt: Date.now().toString(),
+          role: 'user',
         });
+        const getedUser = await this.userService.findByEmail(email);
+        const jwtToken = await this.login({ email, password });
+        await this.userService.createSessionJwt({
+          user: getedUser._id,
+          email: getedUser.email,
+          role: getedUser.role,
+          jwtSessionToken: jwtToken.access_token,
+        });
+        return jwtToken;
       } else {
         throw new UnauthorizedException(['User exist!']);
       }
     } catch (e) {
       throw new UnauthorizedException([e.message]);
     }
-    return await this.login({ email, password });
   }
 
   async login(loginData: LoginDto): Promise<ISuccessSessionResponse> {
     const { email, password } = loginData;
     try {
+      //TODO OAuth 2.0 wit google
       // let {sessionToken} = await this.oktaAuthClient.signIn({username: email, password});
       // const {
       //     id: sessionId,
