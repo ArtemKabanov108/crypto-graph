@@ -7,13 +7,7 @@ import { GetCryptoModule } from './get-crypto/get-crypto.module';
 import { ConfigModule } from './config/config.module';
 
 @Module({
-  imports: [
-    ConfigModule,
-    GetCryptoModule,
-    AuthModule,
-    UserModule,
-    ConfigModule,
-  ],
+  imports: [ConfigModule, GetCryptoModule, AuthModule, UserModule],
   controllers: [AppController],
   providers: [AppService],
 })

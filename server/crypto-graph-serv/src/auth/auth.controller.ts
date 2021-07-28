@@ -4,10 +4,7 @@ import {
   Controller,
   Post,
   Res,
-  HttpStatus,
-  Get,
-  Ip,
-  UseGuards,
+  HttpStatus, UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -20,43 +17,16 @@ import { ValidationErrorObject } from '../common/objects/ValidationErrorObject';
 import { AuthService } from './services/auth/auth.service';
 import { Response } from 'express';
 import { SuccessSessionResponseObject } from '../common/objects/SuccessSessionResponseObject';
-import { AuthGuard } from '@nestjs/passport';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 @ApiBearerAuth()
 @ApiTags('auth')
-// @UseGuards(AuthGuard('local')) // проверить на работоспособность
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  // @UseGuards(AuthGuard('local'))
-  @Post('login')
-  @ApiOperation({ summary: 'Logged user.' })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad request error',
-    type: ValidationErrorObject,
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Success login',
-    type: SuccessSessionResponseObject,
-  })
-  async login(
-    @Body() LoginDto: LoginDto,
-    @Res() response: Response,
-  ): Promise<Response> {
-    const result = await this.authService.login(LoginDto);
-    if (!result) {
-      throw new BadRequestException(['Register Error']);
-    }
-    response.cookie('accessToken', result);
-    return response.status(HttpStatus.OK).json(result);
-  }
-
-  // @UseGuards(AuthGuard('local'))
   @Post('register')
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Create User' })
   @ApiResponse({ status: 403, description: 'Access denied .' })
   @ApiResponse({
@@ -80,8 +50,8 @@ export class AuthController {
     return response.status(HttpStatus.OK).json(result);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Post('get-user')
+  @Post('login')
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Logged user.' })
   @ApiResponse({
     status: 400,
@@ -93,14 +63,40 @@ export class AuthController {
     description: 'Success login',
     type: SuccessSessionResponseObject,
   })
-  async getUser(
+  async login(
     @Body() LoginDto: LoginDto,
     @Res() response: Response,
-  ): Promise<any> {
-    const result = await this.authService.getUser(LoginDto);
+  ): Promise<Response> {
+    const result = await this.authService.login(LoginDto);
     if (!result) {
       throw new BadRequestException(['Register Error']);
     }
+    response.cookie('accessToken', result);
     return response.status(HttpStatus.OK).json(result);
   }
+
+  //Endpoint off *******************************************
+  // @UseGuards(JwtAuthGuard)
+  // @Post('get-user')
+  // @ApiOperation({ summary: 'Logged user.' })
+  // @ApiResponse({
+  //   status: 400,
+  //   description: 'Bad request error',
+  //   type: ValidationErrorObject,
+  // })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'Success login',
+  //   type: SuccessSessionResponseObject,
+  // })
+  // async getUser(
+  //   @Body() accesToken: string,
+  //   @Res() response: Response,
+  // ): Promise<any> {
+  //   const result = await this.authService.getUser(accesToken);
+  //   if (!result) {
+  //     throw new BadRequestException(['Register Error']);
+  //   }
+  //   return response.status(HttpStatus.OK).json(result);
+  // }
 }

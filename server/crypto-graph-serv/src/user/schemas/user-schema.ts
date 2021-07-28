@@ -30,6 +30,9 @@ export class User {
   @Prop()
   role: UserRole;
 
+  @Prop()
+  currentHashedRefreshToken?: string;
+
   //TODO
   // @Prop()
   // isActive: boolean

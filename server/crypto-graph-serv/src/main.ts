@@ -15,8 +15,8 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   const config = new DocumentBuilder()
-    .setTitle('API Earth-size')
-    .setDescription('The Earth-size API description')
+    .setTitle('API Crypto-graph')
+    .setDescription('The Crypto-graph API description')
     .setVersion('1.0')
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
@@ -33,10 +33,8 @@ async function bootstrap() {
     customSiteTitle: 'My API Docs',
   };
 
-  SwaggerModule.setup('docs', app, document, customOptions);
-
   SwaggerModule.setup('api-doc', app, document, customOptions);
-
-  await app.listen(configService.get('server.port'));
+  // reserve port 7200
+  await app.listen(configService.get('server.port') || 7200);
 }
 bootstrap();

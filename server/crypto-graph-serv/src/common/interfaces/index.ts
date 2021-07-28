@@ -11,9 +11,24 @@ export default interface ISuccessSessionResponse {
   // role: string
 }
 
-export interface IUser {
+export interface ISession {
+  sessionId: string;
+  userId: string;
+  userEmail: string;
+}
+
+export interface IRegistrationResponse {
+  id: string;
+}
+
+export interface IUserList {
   email: string;
   watchlist: string[];
+}
+
+export interface IUser {
+  email: string;
+  password: string;
 }
 
 export interface IJwtSession {
@@ -21,4 +36,15 @@ export interface IJwtSession {
   createdAt: string;
   expiresAt: string;
   // status: SessionStatus
+}
+
+//Jwt interface for strategy and etc.
+export interface IJwtUser {
+  id: string;
+  email: string;
+}
+//Jwt payload interface
+export interface IJwtPayload extends IJwtUser {
+  iat: number;
+  exp: number;
 }

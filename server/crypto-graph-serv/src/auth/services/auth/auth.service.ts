@@ -5,29 +5,21 @@ import {
 } from '@nestjs/common';
 import { LoginDto, RegisterDto } from '../../dto/auth.dto';
 import { ConfigService } from '@nestjs/config';
-import ISuccessSessionResponse from '../../../common/interfaces';
+import ISuccessSessionResponse, {
+  IJwtPayload,
+} from '../../../common/interfaces';
 import { UserService } from '../../../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { IUser } from '../../../common/interfaces';
-import {Types} from "mongoose";
-
-export interface IRegistrationResponse {
-  id: string;
-}
-
-export interface ISession {
-  sessionId: string;
-  userId: string;
-  userEmail: string;
-}
+import { Types } from 'mongoose';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private configService: ConfigService,
-    private userService: UserService,
-    private jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
   //ENV data for OKTA
@@ -50,7 +42,7 @@ export class AuthService {
     const { email, password } = registerData;
     const saltOrRounds = 10;
     const hash = await bcrypt.hash(password, saltOrRounds);
-
+    //TODO oAuth Google
     // try {
     //     await this.oktaClient.createUser({
     //         profile: {email, login: email, firstName, lastName, userType: role, },
@@ -62,29 +54,24 @@ export class AuthService {
 
     //TODO UserService create new User
     try {
-      const valid = await this.validateUser(email, password);
+      // const {user:{id, profile:{firstName, lastName}, }} = await this.oktaAuthClient.signIn({username: email, password});
+      await this.userService.create({
+        _id: Types.ObjectId,
+        email,
+        password: hash,
+        watchlist: [],
+        role: 'user',
+      });
+      const getedUser = await this.userService.findByEmail(email);
+      const jwtToken = await this.login({ email, password });
+      await this.userService.createSessionJwt({
+        user: getedUser._id,
+        email: getedUser.email,
+        role: getedUser.role,
+        jwtSessionToken: jwtToken.access_token,
+      });
 
-      if (valid === null) {
-        // const {user:{id, profile:{firstName, lastName}, }} = await this.oktaAuthClient.signIn({username: email, password});
-        await this.userService.create({
-          _id: Types.ObjectId,
-          email,
-          password: hash,
-          watchlist: [],
-          role: 'user',
-        });
-        const getedUser = await this.userService.findByEmail(email);
-        const jwtToken = await this.login({ email, password });
-        await this.userService.createSessionJwt({
-          user: getedUser._id,
-          email: getedUser.email,
-          role: getedUser.role,
-          jwtSessionToken: jwtToken.access_token,
-        });
-        return jwtToken;
-      } else {
-        throw new UnauthorizedException(['User exist!']);
-      }
+      return jwtToken;
     } catch (e) {
       throw new UnauthorizedException([e.message]);
     }
@@ -104,34 +91,18 @@ export class AuthService {
       // } = await this.oktaClient.createSession({sessionToken});
       // let {profile} = await this.oktaClient.getUser(userId)
       const user = await this.userService.findByEmail(email);
-      const credsIsMatch = await this.validateUser(email, password);
-      if (credsIsMatch) {
-        return {
-          access_token: await this.jwtService.sign({ user }),
-        };
-      }
+      return {
+        access_token: await this.jwtService.sign({ user }),
+      };
     } catch (err) {
       throw new BadRequestException([err.message]);
     }
   }
 
-  async getUser(loginData: LoginDto): Promise<IUser> {
-    const { email, password } = loginData;
-    try {
-      const user = await this.userService.findByEmail(email);
-      const credsIsMatch = await this.validateUser(email, password);
-      if (credsIsMatch) {
-        return user;
-      }
-    } catch (err) {
-      throw new BadRequestException([err.message]);
-    }
-  }
-
+  //TODO OAuth 2.0 wit google
   //   getSessionBySessionId(sessionId: string): Promise<any> {
   //     const session = this.oktaClient.getSession(sessionId);
-  //     // const { login, id, userId } = session;
-  //
+  //     // const { login, id, userId } = session;  //
   //     return {};
   // }
 
@@ -139,15 +110,29 @@ export class AuthService {
     return await bcrypt.compare(pass, hash);
   }
 
-  async validateUser(email: string, pass: string): Promise<Object | null> {
-    const user = await this.userService.findByEmail(email);
-    if (user) {
-      const isMatchPass = await this.isMatchPassword(pass, user.password);
-      if (isMatchPass) {
-        const { password, ...result } = user;
-        return result;
-      }
-    }
-    return null;
+  public getCookieWithJwtAccessToken(userId: number) {
+    const payload = { userId };
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_SECRET'),
+      expiresIn: `${this.configService.get('JWT_EXPIRESIN')}s`,
+    });
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+    )}`;
+  }
+
+  public getCookieWithJwtRefreshToken(userId: number) {
+    const payload = { userId };
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_REFRESH_SECRET'),
+      expiresIn: `${this.configService.get('JWT_REFRESH_EXPIRESIN')}s`,
+    });
+    const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+      'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+    )}`;
+    return {
+      cookie,
+      token,
+    };
   }
 }
