@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { UserRole } from '../../common/types';
 
-export type CryptoDocument = User & Document;
+export type UserDocument = User & Document;
 
 @Schema({
   timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },

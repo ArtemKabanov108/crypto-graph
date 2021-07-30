@@ -1,5 +1,6 @@
 import {
-  BadRequestException, Body,
+  BadRequestException,
+  Body,
   Controller,
   Get,
   HttpStatus, Req,
@@ -10,17 +11,18 @@ import { Response } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ValidationErrorObject } from '../common/objects/ValidationErrorObject';
-import { SuccessSessionResponseObject } from '../common/objects/SuccessSessionResponseObject';
-import { UserService } from './user.service';
+import { UserService } from './services/user.service';
 import { UserRequest } from '../common/decorators/auth-request.decorator';
-import {LoginDto} from "../auth/dto/auth.dto";
+import { LoginDto } from '../auth/dto/auth.dto';
+import {IJwtUser} from "../common/interfaces";
+import {IncomingMessage} from "http";
 
 @Controller('user')
 export class UserController {
   constructor(private readonly getUserFavorites: UserService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get('/favorites')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Logged user.' })
   @ApiResponse({
     status: 400,
@@ -33,11 +35,12 @@ export class UserController {
     type: Object, // TODO add interface.
   })
   async getFavorites(
-    @UserRequest() accessToken: string,
     @Res() response: Response,
-    @Body() body: LoginDto,
-  ): Promise<Object> {
-    const favorites = await this.getUserFavorites.getFavoriteList(body.email);
+    @Req() request: any,
+  ): Promise<any> {
+    const favorites = await this.getUserFavorites.getFavoriteList(
+      request.user.email,
+    );
     if (!favorites) {
       throw new BadRequestException(['Register Error']);
     }

@@ -1,7 +1,7 @@
 import { IsJWT, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class jwtSessionDto {
+export class jwtRefreshTokenDto {
   @ApiProperty()
   @IsString()
   user: Object;
@@ -16,5 +16,5 @@ export class jwtSessionDto {
 
   @ApiProperty()
   @IsJWT()
-  jwtSessionToken: string;
+  jwtRefreshToken: string;
 }

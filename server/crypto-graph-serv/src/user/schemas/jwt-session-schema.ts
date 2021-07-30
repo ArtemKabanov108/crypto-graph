@@ -4,10 +4,10 @@ import { UserRole } from '../../common/types';
 import { IsJWT, IsMongoId } from 'class-validator';
 import { User } from './user-schema';
 
-export type CryptoDocument = jwtSession & Document;
+export type JwtRefreshDocument = JwtRefreshToken & Document;
 
 @Schema({ timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } })
-export class jwtSession {
+export class JwtRefreshToken {
   @Prop({ type: Types.ObjectId, ref: User.name })
   @IsMongoId()
   user: Types.ObjectId;
@@ -17,7 +17,7 @@ export class jwtSession {
 
   @Prop()
   @IsJWT()
-  jwtSessionToken: string;
+  refreshToken: string;
 
   @Prop()
   role: UserRole;
@@ -26,4 +26,4 @@ export class jwtSession {
   // isActive: boolean;
 }
 
-export const JwtSchema = SchemaFactory.createForClass(jwtSession);
+export const JwtSchema = SchemaFactory.createForClass(JwtRefreshToken);

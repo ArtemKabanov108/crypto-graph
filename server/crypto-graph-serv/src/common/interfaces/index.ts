@@ -1,15 +1,5 @@
-// import {SessionStatus} from "@okta/okta-sdk-nodejs/src/types/models/SessionStatus";
-
-export default interface ISuccessSessionResponse {
-  // session: ISession
-  access_token: string;
-  // firstName: string
-  // lastName: string
-  // isActive: boolean,
-  // city: string,
-  // country: string
-  // role: string
-}
+import { Request } from 'express';
+import { User } from '../../user/schemas/user-schema';
 
 export interface ISession {
   sessionId: string;
@@ -18,7 +8,8 @@ export interface ISession {
 }
 
 export interface IRegistrationResponse {
-  id: string;
+  getedUser: User;
+  accessToken: string;
 }
 
 export interface IUserList {
@@ -31,7 +22,7 @@ export interface IUser {
   password: string;
 }
 
-export interface IJwtSession {
+export interface IJwtRefreshToken {
   sessionId: string;
   createdAt: string;
   expiresAt: string;
@@ -40,11 +31,20 @@ export interface IJwtSession {
 
 //Jwt interface for strategy and etc.
 export interface IJwtUser {
-  id: string;
-  email: string;
+  userId: string;
+  password: string
 }
 //Jwt payload interface
 export interface IJwtPayload extends IJwtUser {
   iat: number;
   exp: number;
+}
+
+export interface IRequestWithUser extends Request {
+  user: User;
+}
+
+export interface ITokenPayload {
+  userId: number;
+  isSecondFactorAuthenticated?: boolean;
 }
