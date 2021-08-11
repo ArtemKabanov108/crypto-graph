@@ -1,18 +1,7 @@
-import {makeAutoObservable} from "mobx";
-
+// TODO add class for cryptoApi
 class ModalToggle {
-    toggle = false;
-    constructor() {
-        makeAutoObservable(this)
-    }
 
-    handleOpenModal() {
-        ModalToggle.toggle = true
-        console.log("ModalToggle", ModalToggle.toggle)
-    }
-    handleCloseModal() {
-        this.toggle = false
-    }
+
 }
 
-export default new ModalToggle()
+export const modalToggle = new ModalToggle()

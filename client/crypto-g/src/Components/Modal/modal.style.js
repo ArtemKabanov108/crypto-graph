@@ -11,8 +11,8 @@ export const Modal = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  opacity: ${({active}) => ( active ?  '1' : '0' )};
-  pointer-events: ${({active}) => ( active ?  "all" : "none")};
+  opacity: ${({active}) => ( (active) ?  '1' : '0' )};
+  pointer-events: ${({active}) => ( (active) ?  "all" : "none")};
   transition: .8s;
 `;
 
@@ -29,5 +29,5 @@ export const ModalContent = styled.div`
   -webkit-backdrop-filter: blur( 4.0px );
   border-radius: 10px;
   border: 2px solid rgb(255 255 255 / 70%);
-  transform: ${({active}) => ((active === true )? "scale(1)" : "scale(0.5)")};
+  transform: ${({active}) => ((active) ? "scale(1)" : "scale(0.5)")};
 `;
