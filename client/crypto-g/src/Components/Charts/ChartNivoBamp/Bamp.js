@@ -1,5 +1,6 @@
 import React from "react";
 import { ResponsiveBump } from '@nivo/bump'
+import {colors} from "../../../styles-common/common.style";
 
 export const MyResponsiveBump = ({ data }) => {
     return (
@@ -13,7 +14,6 @@ export const MyResponsiveBump = ({ data }) => {
             opacity={0.45}
             inactiveOpacity={0.5}
             startLabelPadding={15}
-            startLabelTextColor={"#e81111"}
             pointSize={10}
             activePointSize={16}
             inactivePointSize={0}
@@ -21,6 +21,8 @@ export const MyResponsiveBump = ({ data }) => {
             pointBorderWidth={3}
             activePointBorderWidth={3}
             pointBorderColor={{ from: 'serie.color' }}
+            endLabelTextColor={colors.textForLabels}
+            startLabelTextColor={colors.textForLabels}
             enableGridX={false}
             enableGridY={false}
             axisTop={{

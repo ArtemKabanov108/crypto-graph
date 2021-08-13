@@ -1,10 +1,9 @@
 import React from "react";
 import {Header} from "../../Components/Header/Header";
 import {observer} from "mobx-react-lite";
-import {SurfaceCnt} from "../../Components/common/Surface/surface.style";
 import {Card} from "../../Components/common/Card/Card";
 import {MyResponsiveBump} from "../../Components/Charts/ChartNivoBamp/Bamp";
-
+import {FillableSurface} from "../../Components/common/Surfaces/FillableSurface/FillableSurface"
 const arr = [
     {
         "id": "Bitcoin",
@@ -38,7 +37,7 @@ export const MainPage = observer(
         return (
             <>
                 <Header />
-                <SurfaceCnt>
+                <FillableSurface>
                     <Card>
                         <MyResponsiveBump data={arr}/>
                     </Card>
@@ -60,8 +59,7 @@ export const MainPage = observer(
                     <Card>
                         <MyResponsiveBump data={arr}/>
                     </Card>
-
-                </SurfaceCnt>
+                </FillableSurface>
             </>
         )
     }

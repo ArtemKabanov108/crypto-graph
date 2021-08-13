@@ -8,5 +8,5 @@ export const HeaderContainer = styled.div`
 
 //TODO add flicker to BtnCtnr(LoginBtn)
 export const BtnCtnr = styled.div`
-  margin: 0 3% 0 auto;
+  margin: 3.1% 3% 0 auto;
 `;

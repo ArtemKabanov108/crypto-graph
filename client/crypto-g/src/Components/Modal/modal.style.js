@@ -9,6 +9,7 @@ export const Modal = styled.div`
   width: 100vw;
   background-color: rgba(0, 0, 0, 0.3);
   position: fixed;
+  z-index: 900;
   top: 0;
   left: 0;
   opacity: ${({active}) => ( (active) ?  '1' : '0' )};

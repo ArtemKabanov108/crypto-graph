@@ -1,21 +1,31 @@
 import React from "react";
 import {NeonInput} from "../../common/Inputs/NeonInput/NeonInput";
-import {ButtonBox, Form, LineBox, LinkBox} from "./loginForm.style";
+import {LinkBoxLog, RegisterBox} from "./loginForm.style";
+import {Form, LineBox, ButtonBox} from "../commonStylesForm/common.styles";
 import {Checkbox} from "../../common/Inputs/CheckBox/Checkbox";
 import {Link} from "../../common/Links/Link";
-import {Glassbtn} from "../../common/Buttons/Glassbutton";
+import {Glassbtn} from "../../common/Buttons/Glassbutton/Glassbutton";
+import {colors} from "../../../styles-common/common.style";
 
-export const LoginForm = () => {
+export const LoginForm = ({handleLinkToRegister}) => {
     return (
         <Form>
             <NeonInput labelText={'Email'} placeholderText={'Enter your email'}/>
             <NeonInput labelText={'Password'} placeholderText={'Enter your password'}/>
             <LineBox>
                 <Checkbox checkboxText={'Remember My'}/>
-                <LinkBox>
+                <LinkBoxLog>
                     <Link textLink={'Forgot password'} />
-                </LinkBox>
+                </LinkBoxLog>
             </LineBox>
+            <RegisterBox>
+                <Glassbtn
+                    background={colors.transparentBackgroundZero}
+                    text={'Registration'}
+                    handleClick={handleLinkToRegister}
+                    fontSize={'0.9'}
+                />
+            </RegisterBox>
             <ButtonBox>
                 <Glassbtn
                     text={'Login with Google'}
@@ -27,7 +37,6 @@ export const LoginForm = () => {
                     fontSize={'1'}
                 />
             </ButtonBox>
-            {/*<ButtonSubmit/>*/}
         </Form>
     )
 }

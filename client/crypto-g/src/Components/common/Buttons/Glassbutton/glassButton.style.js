@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {colors} from "../../../styles-common/common.style";
+import {colors} from "../../../../styles-common/common.style";
 
 export const GlassButton = styled.button`
   margin: 0 auto;
