@@ -5,11 +5,14 @@ import {
     HeaderCard,
     StarContainer
 } from './card.style';
-export const Card = ({children, cryptoName}) => {
+
+export const Card = ({children, cryptoName, width, height}) => {
     const [favoriteToggle, setFavoriteToggle] = useState(false)
     const handleFavoriteOnOff = () => favoriteToggle ? (setFavoriteToggle(false)) : (setFavoriteToggle(true))
     return (
-        <CardCnt>
+        <CardCnt
+            widthCard={width}
+        >
             <HeaderCard>
                 <div/>
                 <CryptoName>{cryptoName}</CryptoName>
@@ -19,7 +22,9 @@ export const Card = ({children, cryptoName}) => {
                     favoriteAdd={favoriteToggle}
                 />
             </HeaderCard>
-            <CardGraph>
+            <CardGraph
+                heightCard={height}
+            >
                 {children}
             </CardGraph>
         </CardCnt>

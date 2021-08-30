@@ -10,7 +10,7 @@ import { ConfigService } from '@nestjs/config';
 // import customOptions from "./common/swaggerOptions"
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   app.useGlobalPipes(new ValidationPipe());
   const configService = app.get(ConfigService);
 

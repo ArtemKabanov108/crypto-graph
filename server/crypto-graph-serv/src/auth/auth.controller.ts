@@ -80,9 +80,9 @@ export class AuthController {
     @Res() response: Response,
     @Req() request: IRequestWithUser,
     // attention! Promise<any> has stump(заглушка) for type! TODO fix that.
-  ): Promise<any> {
+  ): Promise<Response> {
     const loggedUser = await this.authService.login(user);
-    const accessTokenCookie = this.authService.getJwtAccessToken( loggedUser._id, loggedUser.password );
+    const accessToken = this.authService.getJwtAccessToken( loggedUser._id, loggedUser.password );
     const refreshToken = this.authService.getCookieWithJwtRefreshToken( loggedUser._id );
     await this.userService.setCurrentRefreshToken(refreshToken, loggedUser._id);
 
@@ -95,7 +95,7 @@ export class AuthController {
     // It's almost security variant.
     // response.cookie('Set-Cookie', refreshTokenCookie, { domain: '.crypto-graph.com', path: '/auth/' });
     //@
-    return response.status(HttpStatus.OK).json(accessTokenCookie);
+    return response.status(HttpStatus.OK).json({jwt: accessToken, email: loggedUser.email});
   }
 
   @Get('refresh-tokens')

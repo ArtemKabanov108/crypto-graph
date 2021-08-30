@@ -13,7 +13,7 @@ export class User {
   // firstName: string;
   //TODO
   // @Prop()
-  // lastName: string;
+  // nickName: string;
 
   @Prop()
   _id: Types.ObjectId;

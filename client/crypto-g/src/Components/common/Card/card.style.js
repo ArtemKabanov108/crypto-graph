@@ -4,7 +4,7 @@ import paleStar from '../../../images/stars/paleStar.svg';
 
 export const CardCnt = styled.div`
   display: flex;
-  width: 25rem;
+  width: ${({widthCard}) => (widthCard ? widthCard : '25rem')};
   margin: 1rem;
   flex-direction: column;
   align-items: center;
@@ -42,7 +42,7 @@ export const CryptoName = styled.div`
 
 export const CardGraph = styled.div`
   width: 100%;
-  height: 300px;
+  height: ${ ({heightCard}) => (heightCard ? heightCard : '20rem') };
 `;
 
 

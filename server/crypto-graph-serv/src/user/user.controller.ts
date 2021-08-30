@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  Body,
   Controller,
   Get,
   HttpStatus, Req,
@@ -12,10 +11,6 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ValidationErrorObject } from '../common/objects/ValidationErrorObject';
 import { UserService } from './services/user.service';
-import { UserRequest } from '../common/decorators/auth-request.decorator';
-import { LoginDto } from '../auth/dto/auth.dto';
-import {IJwtUser} from "../common/interfaces";
-import {IncomingMessage} from "http";
 
 @Controller('user')
 export class UserController {

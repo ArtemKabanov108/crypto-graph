@@ -1,2 +1,2 @@
-import ModalToggle from '../../../store-states/modal-store/modal.store'
+import ModalToggle from '../../../store/register/registration.store'
 

@@ -89,7 +89,8 @@ export class AuthService {
   }
   //Attention Promise<any>!
   async login(loginData: LoginDto): Promise<any> {
-    const { email } = loginData;
+    const { email, password } = loginData;
+    console.log(email, password)
     try {
       //TODO OAuth 2.0 wit google
       // let {sessionToken} = await this.oktaAuthClient.signIn({username: email, password});
@@ -101,7 +102,12 @@ export class AuthService {
       //     status
       // } = await this.oktaClient.createSession({sessionToken});
       // let {profile} = await this.oktaClient.getUser(userId)
-      return await this.userService.findByEmail(email);
+      const user = await this.userService.findByEmail(email);
+      const isMatch = await this.isMatchPassword(password ,user.password)
+      if (isMatch) {
+        return user
+      }
+
     } catch (err) {
       throw new UnauthorizedException([err.message]);
     }

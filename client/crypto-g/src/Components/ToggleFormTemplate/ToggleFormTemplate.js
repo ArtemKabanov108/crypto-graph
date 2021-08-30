@@ -12,7 +12,6 @@ export const ToggleFormTemplate = () => {
     return (
         <div>
             {toggleForm ? <LoginForm handleLinkToRegister={handleToggleForm}/> : <RegisterForm handleLinkToLogin={handleToggleForm}/>}
-
         </div>
     )
 }

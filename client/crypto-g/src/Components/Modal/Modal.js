@@ -1,9 +1,9 @@
 import React from "react";
 import {Modal, ModalContent} from "./modal.style";
+import {observer} from "mobx-react-lite";
 
-
-export const ModalWindow = ({children, toggle, closeModal}) => {
-        console.log("ModalWindow", toggle)
+export const ModalWindow = observer(
+    ({children, toggle, closeModal}) => {
         return (
             <Modal
                 onClick={() => closeModal()}
@@ -18,3 +18,4 @@ export const ModalWindow = ({children, toggle, closeModal}) => {
             </Modal>
         )
     }
+)
