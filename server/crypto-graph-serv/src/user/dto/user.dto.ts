@@ -9,6 +9,10 @@ export class CreateUserDto {
   _id: any;
 
   @ApiProperty()
+  @IsNotEmpty()
+  nickname: string;
+
+  @ApiProperty()
   @IsEmail()
   email: string;
 

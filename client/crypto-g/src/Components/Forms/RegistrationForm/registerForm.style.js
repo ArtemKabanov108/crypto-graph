@@ -2,8 +2,11 @@ import styled from "styled-components";
 
 export const LinkBoxReg = styled.div`
   display: flex;
-  margin: 3px 0 0 auto ;
-  padding-right: 15px;
+  margin: 10px 0 10px auto ;
+  padding-right: 5px;
+  & :last-child {
+  margin-left: 13px;
+}
 `
 
 export const ButtonBox = styled.div`

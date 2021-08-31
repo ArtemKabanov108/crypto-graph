@@ -6,13 +6,13 @@ import {Checkbox} from "../../common/Inputs/CheckBox/Checkbox";
 import {Link} from "../../common/Links/Link";
 import {Glassbtn} from "../../common/Buttons/Glassbutton/Glassbutton";
 import {colors} from "../../../styles-common/common.style";
-import LogInStore from "../../../store/logIn/logIn.store"
+import AuthStore from "../../../store/authentication/auth.store"
 
 
 export const LoginForm = ({handleLinkToRegister}) => {
 
-    const [loginState, setLoginState] = useState('')
-    const [passwordState, setPasswordState] = useState('')
+    const [login, setLoginState] = useState('')
+    const [password, setPasswordState] = useState('')
 
     const handleFormEmail = (payloadInputLogin) => {
         setLoginState(payloadInputLogin)
@@ -23,7 +23,7 @@ export const LoginForm = ({handleLinkToRegister}) => {
 
     const addToStoreDataLogin = async () => {
         try {
-            if (loginState && passwordState) await LogInStore.handleAddCredoLogin({email: loginState, password: passwordState})
+            if (login && password) await AuthStore.handleAddCredoLogin({email: login, password})
         } catch (e) {
             throw new Error(e)
         }
@@ -42,7 +42,7 @@ export const LoginForm = ({handleLinkToRegister}) => {
                 placeholderText={'Enter your password'}
             />
             <LineBox>
-                <Checkbox checkboxText={'Remember My'}/>
+                <Checkbox checkboxText={'Remember Me'}/>
                 <LinkBoxLog>
                     <Link textLink={'Forgot password'} />
                 </LinkBoxLog>

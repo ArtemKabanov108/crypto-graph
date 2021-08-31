@@ -4,6 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class LoginDto {
   @ApiProperty()
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @ApiProperty()
@@ -12,6 +13,10 @@ export class LoginDto {
 }
 
 export class RegisterDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  nickname: string;
+
   @ApiProperty()
   @IsEmail()
   email: string;

@@ -11,9 +11,8 @@ export class User {
   // TODO
   // @Prop()
   // firstName: string;
-  //TODO
-  // @Prop()
-  // nickName: string;
+  @Prop()
+  nickname: string;
 
   @Prop()
   _id: Types.ObjectId;

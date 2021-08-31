@@ -9,12 +9,14 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
 import { IRegistrationResponse } from '../../../common/interfaces';
+import {JwtStrategy} from "../../strategies/jwt-auth.stategy";
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly configService: ConfigService,
     private readonly userService: UserService,
+    // private readonly jwtStrategy: JwtStrategy,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -35,7 +37,7 @@ export class AuthService {
   // });
 
   async register(registerData: RegisterDto): Promise<IRegistrationResponse> {
-    const { email, password } = registerData;
+    const { nickname, email, password } = registerData;
     const saltOrRounds = 10;
     const hash = await bcrypt.hash(password, saltOrRounds);
     //TODO oAuth Google
@@ -63,6 +65,7 @@ export class AuthService {
       } else {
         await this.userService.create({
           _id: Types.ObjectId,
+          nickname,
           email,
           password: hash,
           watchlist: [],
@@ -142,4 +145,20 @@ export class AuthService {
     });
     return token;
   }
+
+  async getAccessForUser(jwt: string) {
+    try {
+      console.log("getCookieWithJwtRefreshToken",{ jwt });
+
+      // const decode = await this.jwtService.decode(jwt, {'json': true})
+
+      // console.log('getAccessForUser', decode)
+
+      // return await this.jwtStrategy.validate(decode)
+    } catch (e) {
+      console.log(e)
+    }
+
+  }
+
 }

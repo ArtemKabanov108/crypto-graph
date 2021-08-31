@@ -28,7 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'My-jwt') {
   }
   // attention! method validate() has stump for type!
   async validate(payload: IJwtUser): Promise<any> {
-    console.log('attantion! works JwtStrategy!', payload);
+    console.log('attention! works JwtStrategy!', payload);
     //TODO
     const { email } = await this.userService.findUser(payload.userId);
     const user = { email, password: payload.password };

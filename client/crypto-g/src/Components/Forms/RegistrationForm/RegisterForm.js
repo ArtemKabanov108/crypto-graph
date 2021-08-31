@@ -5,10 +5,11 @@ import {Form, LineBox} from "../commonStylesForm/common.styles"
 import {Checkbox} from "../../common/Inputs/CheckBox/Checkbox";
 import {Glassbtn} from "../../common/Buttons/Glassbutton/Glassbutton";
 import {colors} from "../../../styles-common/common.style";
+import AuthStore from "../../../store/authentication/auth.store";
 
 export const RegisterForm = ({handleLinkToLogin}) => {
 
-    const [nicknameState, setNicknameRegister] = useState({
+    const [nickname, setNicknameRegister] = useState({
         nickname: ''
     })
     const [email, setEmailRegister] = useState({
@@ -19,23 +20,37 @@ export const RegisterForm = ({handleLinkToLogin}) => {
     })
 
     const handleFormEmailRegister = (payloadInputLogin) => {
-        setEmailRegister({email: payloadInputLogin})
+        setEmailRegister(payloadInputLogin)
     }
     const handleFormPasswordRegister = (payloadInputPassword) => {
-        setPasswordRegister({password: payloadInputPassword})
+        setPasswordRegister(payloadInputPassword)
     }
     const handleFormNicknameRegister = (payloadInputPassword) => {
-        setNicknameRegister({nickname: payloadInputPassword})
+        setNicknameRegister(payloadInputPassword)
+    }
+
+    const addToStoreDataRegister = async () => {
+        try {
+            if (nickname && email && password) await AuthStore.handleAddCredoRegister({email, password, nickname})
+        } catch (e) {
+            throw new Error(e)
+        }
     }
 
     return (
-        <Form>
+        <Form action={"#"}>
             <NeonInput onFormHandle={handleFormNicknameRegister} labelText={'Nickname'} placeholderText={'Enter your email'}/>
             <NeonInput onFormHandle={handleFormEmailRegister} labelText={'Email'} placeholderText={'Enter your email'}/>
             <NeonInput onFormHandle={handleFormPasswordRegister} labelText={'Password'} placeholderText={'Enter your password'}/>
             <LineBox>
-                <Checkbox clue={"Send massage on your email with registration credentials."} checkboxText={'Send my credo'}/>
+                {/*<Checkbox clue={"LogIn and Remember Me."} checkboxText={'Auto LogIn'}/>*/}
                 <LinkBoxReg>
+                    <Glassbtn
+                        padding={'8px 30px 8px 30px'}
+                        text={'Registration'}
+                        fontSize={'1'}
+                        handleClick={addToStoreDataRegister}
+                    />
                     <Glassbtn
                         background={colors.transparentBackgroundZero}
                         text={'Link to Login'}
@@ -44,13 +59,9 @@ export const RegisterForm = ({handleLinkToLogin}) => {
                     />
                 </LinkBoxReg>
             </LineBox>
-            <ButtonBox>
-                <Glassbtn
-                    padding={'8px 30px 8px 30px'}
-                    text={'Registration'}
-                    fontSize={'1'}
-                />
-            </ButtonBox>
+            {/*<ButtonBox>*/}
+            {/*   */}
+            {/*</ButtonBox>*/}
         </Form>
     )
 }

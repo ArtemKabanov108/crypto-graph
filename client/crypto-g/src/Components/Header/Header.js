@@ -7,8 +7,7 @@ import {ModalWindow} from "../Modal/Modal";
 import {ToggleFormTemplate} from "../ToggleFormTemplate/ToggleFormTemplate";
 import {structureMenu} from "./structureMenu"
 import {ButtonsGroup} from "../common/Buttons/ButtonsGrup/ButtonsGroup";
-import LogInStore from "../../store/logIn/logIn.store"
-import RegistrationStore from "../../store/register/registration.store"
+import AuthStore from "../../store/authentication/auth.store"
 import {observer} from "mobx-react-lite";
 
 export const Header = observer(({viewClick}) => {
@@ -24,16 +23,16 @@ export const Header = observer(({viewClick}) => {
     }
 
     useEffect(() => {
-        LogInStore.serverResponse.email && setToggle(false)
-    }, [LogInStore.serverResponse.email])
+        AuthStore.serverResponse.email && setToggle(false)
+    }, [AuthStore.serverResponse.email])
 
-    console.log(LogInStore.serverResponse.email)
+    console.log(AuthStore.serverResponse)
 
     return (
         <HeaderContainer>
             <Logo/>
             <BtnCtnr>
-                {(!LogInStore.serverResponse.email) ?
+                {(!AuthStore.serverResponse.email) ?
                     (
                         <>
                             <Glassbtn
