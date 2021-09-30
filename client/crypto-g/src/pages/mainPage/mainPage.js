@@ -86,8 +86,6 @@ export const arr = [
 
 export const MainPage = observer(
     () => {
-        console.log("HomeTab", document.cookie)
-
         return (
             <>
                 <Header />

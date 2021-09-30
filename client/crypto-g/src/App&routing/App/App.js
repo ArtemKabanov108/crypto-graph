@@ -13,6 +13,7 @@ function App() {
           const userDataStorage = localStorage.getItem('rememberMe')
           const parsData = JSON.parse(userDataStorage)
           await JwtCheckingStore.addResponseToJwtCheckingStore(parsData)
+
         } catch (e) {
             throw new Error(e)
         }

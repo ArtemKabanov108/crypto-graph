@@ -10,7 +10,7 @@ import { LocalStrategy } from './local.strategy';
  */
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'My-jwt') {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     private readonly configService: ConfigService,
     private readonly userService: UserService,
@@ -27,14 +27,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'My-jwt') {
     });
   }
   // attention! method validate() has stump for type!
-  async validate(payload: IJwtUser): Promise<any> {
+  async validate(payload: IJwtUser): Promise<Object> {
     console.log('attention! works JwtStrategy!', payload);
     //TODO
-    const { email } = await this.userService.findUser(payload.userId);
+    const { email, nickname } = await this.userService.findUser(payload.userId);
     const user = { email, password: payload.password };
     if (await this.localStrategy.validate(user)) {
-      console.log({ email });
-      return { id: payload.userId, email };
+      console.log("User found", { email });
+      return { id: payload.userId, nickname };
     }
   }
 }

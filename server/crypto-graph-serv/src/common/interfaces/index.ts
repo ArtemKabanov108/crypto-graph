@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { User } from '../../user/schemas/user-schema';
+import { Types } from "mongoose";
 
 export interface ISession {
   sessionId: string;
@@ -43,6 +44,13 @@ export interface IJwtPayload extends IJwtUser {
 export interface IRequestWithUser extends Request {
   user: User;
 }
+export interface IRequestUser extends Request {
+  user: {
+    userId: string;
+    refreshToken: string;
+  }
+}
+
 
 export interface ITokenPayload {
   userId: number;

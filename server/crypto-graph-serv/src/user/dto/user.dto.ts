@@ -1,6 +1,5 @@
 import {IsEmail, IsMongoId, IsNotEmpty, IsString} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Prop } from '@nestjs/mongoose';
 import { UserRole } from '../../common/types';
 
 export class CreateUserDto {

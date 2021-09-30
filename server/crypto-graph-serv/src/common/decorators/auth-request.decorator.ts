@@ -1,6 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { IncomingHttpHeaders } from 'http2';
-import { JwtStrategy } from '../../auth/strategies/jwt-auth.stategy';
 
 /**
  * Decorator to extract authed user from request

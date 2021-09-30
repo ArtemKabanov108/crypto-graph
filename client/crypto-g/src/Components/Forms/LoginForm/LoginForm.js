@@ -30,7 +30,7 @@ export const LoginForm = ({handleLinkToRegister}) => {
     }
 
     return (
-        <Form action={"#"}>
+        <Form onSubmit={addToStoreDataLogin}>
             <NeonInput
                 onFormHandle={handleFormEmail}
                 labelText={'Email'}

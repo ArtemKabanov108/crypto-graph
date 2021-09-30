@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Glassbtn} from "../common/Buttons/Glassbutton/Glassbutton";
 import {Logo} from "../common/Logo/Logo";
 import {BtnCtnr, HeaderContainer} from "./header.style";
@@ -7,32 +7,31 @@ import {ModalWindow} from "../Modal/Modal";
 import {ToggleFormTemplate} from "../ToggleFormTemplate/ToggleFormTemplate";
 import {structureMenu} from "./structureMenu"
 import {ButtonsGroup} from "../common/Buttons/ButtonsGrup/ButtonsGroup";
-import AuthStore from "../../store/authentication/auth.store"
+import GlobalStore from "../../store/GlobalStore/global.store"
+
 import {observer} from "mobx-react-lite";
 
 export const Header = observer(({viewClick}) => {
 
     const [toggleState, setToggle] = useState(false)
 
-    const handleOpenModal = () => {
+    const handleOpenModal = useCallback(() => {
         setToggle(true)
-    }
+    }, [toggleState])
 
-    const handleCloseModal = () => {
+    const handleCloseModal = useCallback(() => {
         setToggle(false)
-    }
+    }, [toggleState])
 
     useEffect(() => {
-        AuthStore.serverResponse.email && setToggle(false)
-    }, [AuthStore.serverResponse.email])
-
-    console.log(AuthStore.serverResponse)
-
+        GlobalStore.globalStorageForAuth.nickName && setToggle(false)
+    }, [GlobalStore.globalStorageForAuth.nickName])
+    console.log(document.cookie)
     return (
         <HeaderContainer>
             <Logo/>
             <BtnCtnr>
-                {(!AuthStore.serverResponse.email) ?
+                {(!GlobalStore.globalStorageForAuth.nickName) ?
                     (
                         <>
                             <Glassbtn

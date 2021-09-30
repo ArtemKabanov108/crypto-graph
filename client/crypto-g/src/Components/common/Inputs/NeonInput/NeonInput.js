@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {Input, Label} from "./neonInput.style";
 
 export const NeonInput = ({labelText, placeholderText, onFormHandle}) => {

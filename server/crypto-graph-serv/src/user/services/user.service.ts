@@ -91,7 +91,7 @@ export class UserService {
         refreshTokenOld.refreshToken,
       );
       if (isRefreshTokenMatching) {
-        return true;
+        return userId;
       }
     } catch (e) {
       throw new NotFoundException(e)

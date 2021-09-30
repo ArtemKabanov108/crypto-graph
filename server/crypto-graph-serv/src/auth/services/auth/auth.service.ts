@@ -9,14 +9,12 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
 import { IRegistrationResponse } from '../../../common/interfaces';
-import {JwtStrategy} from "../../strategies/jwt-auth.stategy";
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly configService: ConfigService,
     private readonly userService: UserService,
-    // private readonly jwtStrategy: JwtStrategy,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -108,7 +106,15 @@ export class AuthService {
       const user = await this.userService.findByEmail(email);
       const isMatch = await this.isMatchPassword(password ,user.password)
       if (isMatch) {
-        return user
+        const tokenRefresh = this.getCookieWithJwtRefreshToken(user._id)
+        await this.userService.createRefreshJwt({
+          user: user._id,
+          email: user.email,
+          role: user.role,
+          refreshToken: tokenRefresh,
+        })
+
+        return {LoggedUser: user, tokenRefresh}
       }
 
     } catch (err) {
@@ -146,19 +152,5 @@ export class AuthService {
     return token;
   }
 
-  async getAccessForUser(jwt: string) {
-    try {
-      console.log("getCookieWithJwtRefreshToken",{ jwt });
-
-      // const decode = await this.jwtService.decode(jwt, {'json': true})
-
-      // console.log('getAccessForUser', decode)
-
-      // return await this.jwtStrategy.validate(decode)
-    } catch (e) {
-      console.log(e)
-    }
-
-  }
 
 }

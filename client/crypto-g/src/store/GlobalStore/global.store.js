@@ -1,21 +1,19 @@
 import {makeAutoObservable} from "mobx";
-import {POST} from "../requests/request";
-import {REGISTER_ROUTE} from "../../variable.environment";
 
 class GlobalStore {
 
     //Login/Registration store
-    serverResponse = {};
+    globalStorageForAuth = {};
     //--------------------------
 
     constructor() {
         makeAutoObservable(this)
     }
 
-    async addResponseToGlobalStore(payloadRegister) {
+    async addResponseToGlobalStore(payloadAuth) {
         try {
-            const {data} = await POST( REGISTER_ROUTE, payloadRegister)
-            this.serverResponse = {data}
+            const {nickName, jwt} = payloadAuth
+            this.globalStorageForAuth = {nickName, jwt}
         } catch (e) {
             console.log(e)
         }
