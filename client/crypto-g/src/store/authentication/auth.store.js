@@ -12,7 +12,6 @@ class AuthStore {
 
     async handleAddCredoLogin(payloadLogin) {
         try {
-            console.log(payloadLogin)
             const {data} = await POST( LOGIN_ROUTE, payloadLogin)
             const dataToStringLogin = JSON.stringify(data)
             localStorage.setItem('rememberMe', dataToStringLogin);

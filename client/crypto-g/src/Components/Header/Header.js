@@ -26,7 +26,7 @@ export const Header = observer(({viewClick}) => {
     useEffect(() => {
         GlobalStore.globalStorageForAuth.nickName && setToggle(false)
     }, [GlobalStore.globalStorageForAuth.nickName])
-    console.log(document.cookie)
+
     return (
         <HeaderContainer>
             <Logo/>

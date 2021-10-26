@@ -1,4 +1,9 @@
-import {Injectable, InternalServerErrorException, NotFoundException, ServiceUnavailableException} from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../schemas/user-schema';
 import { Model, Types } from 'mongoose';
@@ -14,20 +19,20 @@ export class UserService {
     @InjectModel(JwtRefreshToken.name)
     private readonly jwtModel: Model<JwtRefreshDocument>,
   ) {}
-  
+
   async create(CreateUser: CreateUserDto): Promise<User> {
     try {
       return await this.userModel.create(CreateUser);
-    } catch (e) {
-      throw new InternalServerErrorException(e)
+    } catch (err) {
+      throw new InternalServerErrorException(err);
     }
   }
 
   async createRefreshJwt(CreateJwtRefreshToken: JwtRefreshToken): Promise<Object> {
     try {
       return await this.jwtModel.create(CreateJwtRefreshToken);
-    } catch (e) {
-      throw new ServiceUnavailableException(e)
+    } catch (err) {
+      throw new ServiceUnavailableException(err);
     }
   }
 
@@ -46,16 +51,16 @@ export class UserService {
       } else {
         return this.userModel.findById(id).count();
       }
-    } catch (e) {
-      throw new NotFoundException(e)
+    } catch (err) {
+      throw new NotFoundException(err);
     }
   }
 
   async findUser(id: string): Promise<User> {
     try {
       return this.userModel.findById(Types.ObjectId(id)).lean().exec();
-    } catch (e) {
-      throw new NotFoundException(e)
+    } catch (err) {
+      throw new NotFoundException(err);
     }
   }
 
@@ -85,7 +90,7 @@ export class UserService {
   async getUserIfRefreshTokenMatches(refreshToken: string, userId: string) {
     try {
       const refreshTokenOld = await this.jwtModel.findOne({ user: Types.ObjectId(userId) });
-      console.log("refreshTokenOld", {refreshTokenOld})
+      console.log('refreshTokenOld', { refreshTokenOld });
       const isRefreshTokenMatching = await bcrypt.compare(
         refreshToken,
         refreshTokenOld.refreshToken,
@@ -94,8 +99,7 @@ export class UserService {
         return userId;
       }
     } catch (e) {
-      throw new NotFoundException(e)
+      throw new NotFoundException(e);
     }
   }
-
 }

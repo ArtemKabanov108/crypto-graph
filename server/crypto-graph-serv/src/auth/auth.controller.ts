@@ -6,7 +6,8 @@ import {
   Res,
   HttpStatus,
   UseGuards,
-  Req, Get,
+  Req,
+  Get,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -21,10 +22,10 @@ import { Response } from 'express';
 import { SuccessSessionResponseObject } from '../common/objects/SuccessSessionResponseObject';
 import { AuthGuard } from './guards/auth.guard';
 import { UserService } from '../user/services/user.service';
-import {IRequestUser, IRequestWithUser} from '../common/interfaces';
+import { IRequestUser, IRequestWithUser } from '../common/interfaces';
 import JwtRefreshGuard from './guards/jwt-refresh.guard';
-import {JwtAuthGuard} from "./guards/jwt-auth.guard";
-import {JwtAccessDto} from "./dto/jwtAccess.dto";
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtAccessDto } from './dto/jwtAccess.dto';
 
 @ApiBearerAuth()
 @ApiTags('auth')
@@ -52,16 +53,19 @@ export class AuthController {
     @Body() body: RegisterDto,
     @Res() response: Response,
   ): Promise<Response> {
-    const { getedUser, accessToken } = await this.authService.register(body);
-    if (!getedUser) throw new BadRequestException(['Register Error']);
-    const refreshToken = this.authService.getCookieWithJwtRefreshToken(getedUser._id);
+    const { receivedUser, accessToken } = await this.authService.register(body);
+    if (!receivedUser) throw new BadRequestException(['Register Error']);
+    const refreshToken = this.authService.getCookieWithJwtRefreshToken(
+      receivedUser._id,
+    );
     //@
     // It's almost security variant.
     // response.cookie('Set-Cookie', refreshTokenCookie, { domain: '.crypto-graph.com', path: '/auth/' });
     //@
-    return response.status(HttpStatus.OK)
-      .cookie('tokenRefresh', refreshToken, {httpOnly: true})
-      .json({jwt: accessToken, email: getedUser.email});
+    return response
+      .status(HttpStatus.OK)
+      .cookie('tokenRefresh', refreshToken, { httpOnly: true })
+      .json({ jwt: accessToken, email: receivedUser.email });
   }
 
   @Post('login')
@@ -80,11 +84,13 @@ export class AuthController {
   async login(
     @Body() user: LoginDto,
     @Res() response: Response,
-    @Req() request: IRequestWithUser,
     // attention! Promise<any> has stump(заглушка) for type! TODO fix that.
   ): Promise<Response> {
-    const {LoggedUser, tokenRefresh} = await this.authService.login(user);
-    const accessToken = this.authService.getJwtAccessToken( LoggedUser._id, LoggedUser.password );
+    const { LoggedUser, tokenRefresh } = await this.authService.login(user);
+    const accessToken = this.authService.getJwtAccessToken(
+      LoggedUser._id,
+      LoggedUser.password,
+    );
     if (!user) {
       throw new BadRequestException(['Register Error']);
     }
@@ -92,34 +98,42 @@ export class AuthController {
     // It's almost security variant.
     // response.cookie('Set-Cookie', refreshTokenCookie, { domain: '.crypto-graph.com', path: '/auth/' });
     //@
-    return response.status(HttpStatus.OK)
-      .cookie('tokenRefresh', tokenRefresh, {httpOnly: true})
-      .json({jwt: accessToken, nickName: LoggedUser.nickname});
+    return response
+      .status(HttpStatus.OK)
+      .cookie('tokenRefresh', tokenRefresh, { httpOnly: true })
+      .json({ jwt: accessToken, nickName: LoggedUser.nickname });
   }
 
   @Get('refresh-tokens')
   @UseGuards(JwtRefreshGuard)
   async refresh(@Req() request: IRequestUser, @Res() response: Response) {
     try {
-      console.log("/auth/refresh-tokens", request.user.userId)
-      const userForRefresh = await this.userService.findUser(request.user.userId)
+      console.log('/auth/refresh-tokens', request.user.userId);
+      const userForRefresh = await this.userService.findUser(
+        request.user.userId,
+      );
       const accessToken = this.authService.getJwtAccessToken(
         userForRefresh._id,
         userForRefresh.password,
       );
-      const refreshToken = this.authService.getCookieWithJwtRefreshToken(userForRefresh._id);
-      await this.userService.setCurrentRefreshToken(refreshToken, userForRefresh._id)
+      const refreshToken = this.authService.getCookieWithJwtRefreshToken(
+        userForRefresh._id,
+      );
+      await this.userService.setCurrentRefreshToken(
+        refreshToken,
+        userForRefresh._id,
+      );
       //@
       // It's almost security variant.
       // response.cookie('Set-Cookie', refreshToken, {httpOnly: true});
       //@
-      return response.status(HttpStatus.OK)
-        .cookie('tokenRefresh', refreshToken, {httpOnly: true})
-        .json({jwt: accessToken});
-    } catch (e) {
-      throw new BadRequestException(e)
+      return response
+        .status(HttpStatus.OK)
+        .cookie('tokenRefresh', refreshToken, { httpOnly: true })
+        .json({ jwt: accessToken });
+    } catch (err) {
+      throw new BadRequestException(err);
     }
-
   }
 
   @Post('jwtAccess')
@@ -134,8 +148,14 @@ export class AuthController {
     description: 'Success login',
     type: SuccessSessionResponseObject,
   })
-  async getAccessWithJWT(@Body() body: JwtAccessDto, @Res() response: Response, @Req() request: IRequestWithUser) {
-    return response.status(HttpStatus.OK).json({jwt: body.jwt, nickName: request.user.nickname});
+  async getAccessWithJWT(
+    @Body() body: JwtAccessDto,
+    @Res() response: Response,
+    @Req() request: IRequestWithUser,
+  ) {
+    return response
+      .status(HttpStatus.OK)
+      .json({ jwt: body.jwt, nickName: request.user.nickname });
   }
 
   //Endpoint off *******************************************

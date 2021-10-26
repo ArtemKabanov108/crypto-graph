@@ -9,7 +9,7 @@ export interface ISession {
 }
 
 export interface IRegistrationResponse {
-  getedUser: User;
+  receivedUser: User;
   accessToken: string;
 }
 

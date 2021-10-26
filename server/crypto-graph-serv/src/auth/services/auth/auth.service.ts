@@ -1,5 +1,6 @@
 import {
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { LoginDto, RegisterDto } from '../../dto/auth.dto';
@@ -7,8 +8,10 @@ import { ConfigService } from '@nestjs/config';
 import { UserService } from '../../../user/services/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { Types } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { IRegistrationResponse } from '../../../common/interfaces';
+import { InjectModel } from '@nestjs/mongoose';
+import { JwtRefreshDocument, JwtRefreshToken } from "../../../user/schemas/jwt-session-schema";
 
 @Injectable()
 export class AuthService {
@@ -16,6 +19,8 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    @InjectModel(JwtRefreshToken.name)
+    private readonly jwtModel: Model<JwtRefreshDocument>,
   ) {}
 
   //ENV data for OKTA
@@ -82,7 +87,7 @@ export class AuthService {
           refreshToken: token,
         });
 
-        return { getedUser, accessToken };
+        return { receivedUser: getedUser, accessToken };
       }
     } catch (e) {
       throw new UnauthorizedException([e.message]);
@@ -104,19 +109,18 @@ export class AuthService {
       // } = await this.oktaClient.createSession({sessionToken});
       // let {profile} = await this.oktaClient.getUser(userId)
       const user = await this.userService.findByEmail(email);
-      const isMatch = await this.isMatchPassword(password ,user.password)
+      const isMatch = await this.isMatchPassword(password, user.password);
       if (isMatch) {
-        const tokenRefresh = this.getCookieWithJwtRefreshToken(user._id)
-        await this.userService.createRefreshJwt({
+        const tokenRefresh = this.getCookieWithJwtRefreshToken(user._id);
+        const entitiRefreshToken: JwtRefreshToken = {
           user: user._id,
           email: user.email,
           role: user.role,
           refreshToken: tokenRefresh,
-        })
-
-        return {LoggedUser: user, tokenRefresh}
+        };
+        await this.checkUserByRefreshTokenAndUpdate(entitiRefreshToken);
+        return { LoggedUser: user, tokenRefresh };
       }
-
     } catch (err) {
       throw new UnauthorizedException([err.message]);
     }
@@ -144,7 +148,7 @@ export class AuthService {
 
   public getCookieWithJwtRefreshToken(userId: Types.ObjectId) {
     const payload = { userId };
-    console.log("getCookieWithJwtRefreshToken",{ payload });
+    console.log('getCookieWithJwtRefreshToken', { payload });
     const token = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_REFRESH_SECRET'),
       expiresIn: `${this.configService.get('JWT_REFRESH_EXPIRESIN')}s`,
@@ -152,5 +156,11 @@ export class AuthService {
     return token;
   }
 
-
+  async checkUserByRefreshTokenAndUpdate(jwtRefreshTokenDB: JwtRefreshToken) {
+    try {
+      await this.jwtModel.findOneAndUpdate({ user: jwtRefreshTokenDB.user }, jwtRefreshTokenDB);
+    } catch (err) {
+      throw new NotFoundException(err);
+    }
+  }
 }

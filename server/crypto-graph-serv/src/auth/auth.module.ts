@@ -8,6 +8,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt-auth.stategy';
 import { JwtRefreshTokenStrategy } from './strategies/jwt-refresh.strategy';
+import { MongooseModule } from '@nestjs/mongoose';
+import { JwtRefreshToken, JwtSchema } from '../user/schemas/jwt-session-schema';
 
 @Global()
 @Module({
@@ -23,6 +25,9 @@ import { JwtRefreshTokenStrategy } from './strategies/jwt-refresh.strategy';
         },
       }),
     }),
+    MongooseModule.forFeature([
+      { name: JwtRefreshToken.name, schema: JwtSchema },
+    ]),
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshTokenStrategy],

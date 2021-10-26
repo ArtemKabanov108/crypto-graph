@@ -8,7 +8,6 @@ import {Glassbtn} from "../../common/Buttons/Glassbutton/Glassbutton";
 import {colors} from "../../../styles-common/common.style";
 import AuthStore from "../../../store/authentication/auth.store"
 
-
 export const LoginForm = ({handleLinkToRegister}) => {
 
     const [login, setLoginState] = useState('')
