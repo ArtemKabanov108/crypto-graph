@@ -1,13 +1,14 @@
 import React from "react";
 import { ResponsiveBump } from '@nivo/bump'
 import {colors} from "../../../styles-common/common.style";
+import {neonTheme} from "../../../styles-common/themesCharts/themesForCharts";
 
 export const MyResponsiveBump = ({ data }) => {
     return (
         <ResponsiveBump
             data={data}
+            theme={neonTheme}
             margin={{ top: 40, right: 100, bottom: 40, left: 60 }}
-            colors={{ scheme: 'nivo' }}
             lineWidth={5}
             activeLineWidth={6}
             inactiveLineWidth={3}
