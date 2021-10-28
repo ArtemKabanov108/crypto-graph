@@ -15,7 +15,7 @@ async function bootstrap() {
     credentials: true,
     origin: 'http://localhost:4000',
   });
-  app.use(cookieParser())
+  app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe());
   const configService = app.get(ConfigService);
 

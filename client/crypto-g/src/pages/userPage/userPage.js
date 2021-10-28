@@ -10,7 +10,6 @@ export const UserPage = () => {
     const handleViewOpen = (labelBtn) => {
         setUserViewContent({view: labelBtn})
     }
-    console.log(userViewContent.view)
     return (
         <UserPageCnt>
             <Header
