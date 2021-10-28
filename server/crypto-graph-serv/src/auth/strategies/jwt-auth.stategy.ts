@@ -2,9 +2,10 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { IJwtUser } from '../../common/interfaces';
+import {IJwtUser, IRequestWithUser, IResponseJWTStrategy} from '../../common/interfaces';
 import { UserService } from '../../user/services/user.service';
 import { LocalStrategy } from './local.strategy';
+import { Request } from 'express';
 /**
  * Passport JWT Strategy
  */
@@ -18,7 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
-        (request: any) => {
+        (request: Request) => {
           return request.headers.authorization;
         },
       ]),
@@ -27,13 +28,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
   // attention! method validate() has stump for type!
-  async validate(payload: IJwtUser): Promise<Object> {
+  async validate(payload: IJwtUser): Promise<IResponseJWTStrategy> {
     console.log('attention! works JwtStrategy!', payload);
     //TODO
     const { email, nickname } = await this.userService.findUser(payload.userId);
     const user = { email, password: payload.password };
     if (await this.localStrategy.validate(user)) {
-      console.log("User found", { email });
+      console.log('User found', { email });
       return { id: payload.userId, nickname };
     }
   }

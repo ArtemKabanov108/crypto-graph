@@ -1,16 +1,13 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-  ServiceUnavailableException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../schemas/user-schema';
 import { Model, Types } from 'mongoose';
-import { CreateUserDto } from '../dto/user.dto';
-import { jwtRefreshTokenDto } from '../../auth/dto/jwtSessionDto';
-import { JwtRefreshToken, JwtRefreshDocument } from '../schemas/jwt-session-schema';
+import {
+  JwtRefreshToken,
+  JwtRefreshDocument,
+} from '../schemas/jwt-session-schema';
 import * as bcrypt from 'bcrypt';
+import {IUserList} from "../../common/interfaces";
 
 @Injectable()
 export class UserService {
@@ -20,27 +17,11 @@ export class UserService {
     private readonly jwtModel: Model<JwtRefreshDocument>,
   ) {}
 
-  async create(CreateUser: CreateUserDto): Promise<User> {
-    try {
-      return await this.userModel.create(CreateUser);
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
-  }
-
-  async createRefreshJwt(CreateJwtRefreshToken: JwtRefreshToken): Promise<Object> {
-    try {
-      return await this.jwtModel.create(CreateJwtRefreshToken);
-    } catch (err) {
-      throw new ServiceUnavailableException(err);
-    }
-  }
-
   async findByEmail(email: string): Promise<User> {
-    try{
+    try {
       return this.userModel.findOne({ email: email }).lean().exec();
-    } catch (e) {
-      throw new NotFoundException(e)
+    } catch (err) {
+      throw new NotFoundException(err);
     }
   }
 
@@ -65,9 +46,9 @@ export class UserService {
   }
 
   // TODO not correct method (str. 36 mast will be id)
-  async getFavoriteList(email: string): Promise<any> {
+  async getFavoriteList(id: string): Promise<IUserList> {
     const { watchlist, _id } = await this.userModel
-      .findOne({ email: email })
+      .findOne({ _id: id })
       .exec();
     return { watchlist, userId: _id };
     // variant response server with all data user
@@ -75,31 +56,15 @@ export class UserService {
   }
 
   async setCurrentRefreshToken(refreshToken: string, userId: Types.ObjectId) {
-    try{
-      console.log("userId", {userId})
+    try {
+      console.log('userId', { userId });
       const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
       await this.jwtModel.findOneAndUpdate(
         { user: userId },
-        { refreshToken: currentHashedRefreshToken }
+        { refreshToken: currentHashedRefreshToken },
       );
-    } catch (e) {
-      throw new NotFoundException(e)
-    }
-  }
-
-  async getUserIfRefreshTokenMatches(refreshToken: string, userId: string) {
-    try {
-      const refreshTokenOld = await this.jwtModel.findOne({ user: Types.ObjectId(userId) });
-      console.log('refreshTokenOld', { refreshTokenOld });
-      const isRefreshTokenMatching = await bcrypt.compare(
-        refreshToken,
-        refreshTokenOld.refreshToken,
-      );
-      if (isRefreshTokenMatching) {
-        return userId;
-      }
-    } catch (e) {
-      throw new NotFoundException(e);
+    } catch (err) {
+      throw new NotFoundException(err);
     }
   }
 }

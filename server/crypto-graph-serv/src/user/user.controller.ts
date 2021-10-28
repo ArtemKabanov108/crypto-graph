@@ -2,7 +2,8 @@ import {
   BadRequestException,
   Controller,
   Get,
-  HttpStatus, Req,
+  HttpStatus,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -11,10 +12,11 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ValidationErrorObject } from '../common/objects/ValidationErrorObject';
 import { UserService } from './services/user.service';
+import {IRequestWithUser} from "../common/interfaces";
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly getUserFavorites: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   @Get('/favorites')
   @UseGuards(JwtAuthGuard)
@@ -31,11 +33,9 @@ export class UserController {
   })
   async getFavorites(
     @Res() response: Response,
-    @Req() request: any,
-  ): Promise<any> {
-    const favorites = await this.getUserFavorites.getFavoriteList(
-      request.user.email,
-    );
+    @Req() request: IRequestWithUser,
+  ): Promise<Response> {
+    const favorites = await this.userService.getFavoriteList(request.user.id);
     if (!favorites) {
       throw new BadRequestException(['Register Error']);
     }

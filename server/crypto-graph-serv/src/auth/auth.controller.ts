@@ -8,6 +8,7 @@ import {
   UseGuards,
   Req,
   Get,
+  Put,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -84,7 +85,6 @@ export class AuthController {
   async login(
     @Body() user: LoginDto,
     @Res() response: Response,
-    // attention! Promise<any> has stump(заглушка) for type! TODO fix that.
   ): Promise<Response> {
     const { LoggedUser, tokenRefresh } = await this.authService.login(user);
     const accessToken = this.authService.getJwtAccessToken(
@@ -158,6 +158,28 @@ export class AuthController {
       .json({ jwt: body.jwt, nickName: request.user.nickname });
   }
 
+  @Put('logout')
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request error',
+    type: ValidationErrorObject,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'LogOut success',
+    type: SuccessSessionResponseObject,
+  })
+  async logOutUser(
+    @Req() request: IRequestWithUser,
+    @Res() response: Response,
+  ) {
+    const resDel = await this.authService.deleteRefreshToken(request.user.id);
+    return response
+      .status(HttpStatus.OK)
+      .clearCookie('tokenRefresh')
+      .json({ resDel });
+  }
   //Endpoint off *******************************************
   // @UseGuards(JwtAuthGuard)
   // @Post('get-user')

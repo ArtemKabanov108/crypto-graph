@@ -1,11 +1,12 @@
-import {IsEmail, IsMongoId, IsNotEmpty, IsString} from 'class-validator';
+import { IsEmail, IsMongoId, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from '../../common/types';
+import { Types } from 'mongoose';
 
 export class CreateUserDto {
   @ApiProperty()
   @IsMongoId()
-  _id: any;
+  _id: Types.ObjectId;
 
   @ApiProperty()
   @IsNotEmpty()
