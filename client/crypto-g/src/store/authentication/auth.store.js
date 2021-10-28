@@ -1,7 +1,8 @@
 import {makeAutoObservable} from "mobx";
-import {POST} from "../requests/request";
-import {LOGIN_ROUTE, REGISTER_ROUTE} from "../../serverRouting/switch";
+import {POST, PUT} from "../requests/request";
+import {LOGIN_ROUTE, LOGOUT_ROUT, REGISTER_ROUTE} from "../../serverRouting/switch";
 import GlobalStore from "../GlobalStore/global.store";
+import {getLocalStorage, setLocalStorage} from "../../helpers/helpersFoo";
 
 
 class AuthStore {
@@ -13,8 +14,7 @@ class AuthStore {
     async handleAddCredoLogin(payloadLogin) {
         try {
             const {data} = await POST( LOGIN_ROUTE, payloadLogin)
-            const dataToStringLogin = JSON.stringify(data)
-            localStorage.setItem('rememberMe', dataToStringLogin);
+            setLocalStorage(data, 'rememberMe')
             await GlobalStore.addResponseToGlobalStore(data)
         } catch (e) {
             console.log(e)
@@ -27,11 +27,24 @@ class AuthStore {
         }
         try {
             const {data} = await POST( REGISTER_ROUTE, payloadRegister, options)
-            const dataToStringRegister = JSON.stringify(data)
-            localStorage.setItem('rememberMe', dataToStringRegister);
+            setLocalStorage(data, 'rememberMe')
             await GlobalStore.addResponseToGlobalStore(data)
         } catch (e) {
             console.log(e)
+        }
+    }
+
+    async handleLogOutUser() {
+        try {
+            const jwtAccessFromLocalStorage = getLocalStorage('rememberMe')
+            const res = await PUT(LOGOUT_ROUT, jwtAccessFromLocalStorage)
+            if (res.status === 200) {
+                localStorage.clear()
+                GlobalStore.clearGlobalStore()
+                // window.location.reload()
+            }
+        } catch (err) {
+            console.log(err)
         }
     }
 

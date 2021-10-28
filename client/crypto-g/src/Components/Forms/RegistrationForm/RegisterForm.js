@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import {NeonInput} from "../../common/Inputs/NeonInput/NeonInput";
-import {ButtonBox, LinkBoxReg} from "./registerForm.style";
+import {LinkBoxReg} from "./registerForm.style";
 import {Form, LineBox} from "../commonStylesForm/common.styles"
-import {Checkbox} from "../../common/Inputs/CheckBox/Checkbox";
 import {Glassbtn} from "../../common/Buttons/Glassbutton/Glassbutton";
 import {colors} from "../../../styles-common/common.style";
 import AuthStore from "../../../store/authentication/auth.store";
@@ -38,7 +37,7 @@ export const RegisterForm = ({handleLinkToLogin}) => {
     }
 
     return (
-        <Form action={"#"}>
+        <Form onSubmit={addToStoreDataRegister}>
             <NeonInput onFormHandle={handleFormNicknameRegister} labelText={'Nickname'} placeholderText={'Enter your email'}/>
             <NeonInput onFormHandle={handleFormEmailRegister} labelText={'Email'} placeholderText={'Enter your email'}/>
             <NeonInput onFormHandle={handleFormPasswordRegister} labelText={'Password'} placeholderText={'Enter your password'}/>
@@ -46,12 +45,14 @@ export const RegisterForm = ({handleLinkToLogin}) => {
                 {/*<Checkbox clue={"LogIn and Remember Me."} checkboxText={'Auto LogIn'}/>*/}
                 <LinkBoxReg>
                     <Glassbtn
+                        buttonType={'submit'}
                         padding={'8px 30px 8px 30px'}
                         text={'Registration'}
                         fontSize={'1'}
                         handleClick={addToStoreDataRegister}
                     />
                     <Glassbtn
+                        buttonType={'button'}
                         background={colors.transparentBackgroundZero}
                         text={'Link to Login'}
                         handleClick={handleLinkToLogin}
@@ -59,9 +60,6 @@ export const RegisterForm = ({handleLinkToLogin}) => {
                     />
                 </LinkBoxReg>
             </LineBox>
-            {/*<ButtonBox>*/}
-            {/*   */}
-            {/*</ButtonBox>*/}
         </Form>
     )
 }

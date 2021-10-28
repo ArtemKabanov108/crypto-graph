@@ -1,6 +1,11 @@
-export const structureMenu = [
-    {label: "Home"},
-    {label: "Top chart"},
-    {label: "Favorites"},
-    {label: "LogOut"},
-]
+
+export const structureMenu = {
+    home: "Home",
+    topChart: "Top Chart",
+    favor: "Favorites",
+    logout: "LogOut",
+}
+
+export const structureMenuValuesList = Object.values(structureMenu)
+
+

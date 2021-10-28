@@ -19,6 +19,10 @@ class GlobalStore {
         }
     }
 
+    clearGlobalStore() {
+        this.globalStorageForAuth = {}
+    }
+
 }
 
 export default new GlobalStore()

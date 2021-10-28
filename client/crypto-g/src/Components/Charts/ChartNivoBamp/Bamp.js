@@ -1,14 +1,14 @@
 import React from "react";
-import { ResponsiveBump } from '@nivo/bump'
+import {ResponsiveBump} from '@nivo/bump'
 import {colors} from "../../../styles-common/common.style";
 import {neonTheme} from "../../../styles-common/themesCharts/themesForCharts";
 
-export const MyResponsiveBump = ({ data }) => {
+export const MyResponsiveBump = ({data}) => {
     return (
         <ResponsiveBump
             data={data}
             theme={neonTheme}
-            margin={{ top: 40, right: 100, bottom: 40, left: 60 }}
+            margin={{top: 40, right: 100, bottom: 40, left: 60}}
             lineWidth={5}
             activeLineWidth={6}
             inactiveLineWidth={3}
@@ -18,11 +18,10 @@ export const MyResponsiveBump = ({ data }) => {
             pointSize={10}
             activePointSize={16}
             inactivePointSize={0}
-            pointColor={{ theme: 'background' }}
+            pointColor={{theme: 'background'}}
             pointBorderWidth={3}
             activePointBorderWidth={3}
-            pointBorderColor={{ from: 'serie.color' }}
-            endLabelTextColor={colors.textForLabels}
+            pointBorderColor={{from: 'serie.color'}}
             startLabelTextColor={colors.textForLabels}
             enableGridX={false}
             enableGridY={false}
@@ -52,7 +51,5 @@ export const MyResponsiveBump = ({ data }) => {
                 legendOffset: -40
             }}
         />
-
-
     )
 }

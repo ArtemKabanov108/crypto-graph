@@ -9,7 +9,7 @@ export const Glassbtn = ({text, padding, background, fontSize, handleClick, butt
             paddingOption={padding}
             backgroundOption={background}
             fontSize={fontSize}
-            onClick={() => handleClick(text)}
+            onClick={() => handleClick?.(text)}
         >
           {text}
         </GlassButton>

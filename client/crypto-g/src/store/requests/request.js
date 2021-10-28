@@ -8,7 +8,7 @@ export const POST = async (route, payloadRequest, options) => {
             headers: {authorization: options?.jwt
         }})
     } catch (err) {
-        console.log(err)
+        console.error(err)
     }
 }
 
@@ -19,8 +19,19 @@ export const GET = async (route, payloadForConfigGET) => {
             headers: {authorization: payloadForConfigGET?.jwt
             }
         })
-
     } catch (err) {
-        console.log(err)
+        console.error(err)
+    }
+}
+
+
+export const PUT = async (route, options) => {
+    try {
+        return await axios.put(`${SERVER_URL}${route}`, {}, {
+            withCredentials: true,
+            headers: {authorization: options?.jwt
+            }})
+    } catch (err) {
+        console.error(err)
     }
 }

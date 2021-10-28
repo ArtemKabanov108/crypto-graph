@@ -7,7 +7,7 @@ export const Modal = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.8);
   position: fixed;
   z-index: 900;
   top: 0;

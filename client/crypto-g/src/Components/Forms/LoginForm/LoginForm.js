@@ -20,11 +20,12 @@ export const LoginForm = ({handleLinkToRegister}) => {
         setPasswordState(payloadInputPassword)
     }
 
-    const addToStoreDataLogin = async () => {
+    const addToStoreDataLogin = async (e) => {
+        e.preventDefault()
         try {
             if (login && password) await AuthStore.handleAddCredoLogin({email: login, password})
-        } catch (e) {
-            throw new Error(e)
+        } catch (err) {
+            throw new Error(err)
         }
     }
 
@@ -48,6 +49,7 @@ export const LoginForm = ({handleLinkToRegister}) => {
             </LineBox>
             <RegisterBox>
                 <Glassbtn
+                    buttonType={'button'}
                     background={colors.transparentBackgroundZero}
                     text={'Registration'}
                     handleClick={handleLinkToRegister}
@@ -56,14 +58,15 @@ export const LoginForm = ({handleLinkToRegister}) => {
             </RegisterBox>
             <ButtonBox>
                 <Glassbtn
+                    buttonType={'button'}
                     text={'Login with Google'}
                     fontSize={'1'}
                 />
                 <Glassbtn
+                    buttonType={"submit"}
                     padding={'8px 30px 8px 30px'}
                     text={'Login'}
                     fontSize={'1'}
-                    handleClick={addToStoreDataLogin}
                 />
             </ButtonBox>
         </Form>
