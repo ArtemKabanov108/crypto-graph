@@ -19,7 +19,7 @@ class GlobalStore {
         }
     }
 
-    clearGlobalStore() {
+     clearGlobalStore() {
         this.globalStorageForAuth = {}
     }
 

@@ -66,7 +66,7 @@ export class AuthService {
     try {
       //TODO
       // const {user:{id, profile:{firstName, lastName}, }} = await this.oktaAuthClient.signIn({username: email, password});
-      const userExists = await this.userService.userExists(email);
+      const userExists = await this.userExists(email);
       if (userExists) {
         throw new UnauthorizedException({
           message: `User with this email exist. Pleas using different email.`,
@@ -222,5 +222,29 @@ export class AuthService {
       throw new NotFoundException(e);
     }
   }
-}
 
+  async setCurrentRefreshToken(refreshToken: string, userId: Types.ObjectId) {
+    try {
+      console.log('userId', { userId });
+      const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+      await this.jwtModel.findOneAndUpdate(
+        { user: userId },
+        { refreshToken: currentHashedRefreshToken },
+      );
+    } catch (err) {
+      throw new NotFoundException(err);
+    }
+  }
+
+  async userExists(userEmail?: string, id?: string): Promise<number> {
+    try {
+      if (userEmail) {
+        return this.userModel.findOne({ email: userEmail }).count();
+      } else {
+        return this.userModel.findById(id).count();
+      }
+    } catch (err) {
+      throw new NotFoundException(err);
+    }
+  }
+}

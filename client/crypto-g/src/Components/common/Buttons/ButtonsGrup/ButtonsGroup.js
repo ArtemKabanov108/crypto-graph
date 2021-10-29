@@ -4,6 +4,7 @@ import {colors} from "../../../../styles-common/common.style";
 import {ButtonGroup} from "./buttonsGrup.style";
 
 export const ButtonsGroup = ({labelsList, menuClick}) => {
+    console.log(labelsList)
     return (
         <ButtonGroup>
             { (labelsList.length) && (labelsList.map( (label) => (

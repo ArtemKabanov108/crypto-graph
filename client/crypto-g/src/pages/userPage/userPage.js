@@ -1,22 +1,25 @@
 import React, {useState} from "react";
 import {Header} from "../../Components/Header/Header";
 import {UserPageCnt} from "./userPage.style";
-import {userPageRenderMap} from "./UserPageRenderMap";
+import {renderTabFactory} from "./UserPageTabFactory";
+import {structureMenu} from "../../Components/Header/structureMenu";
 
 export const UserPage = () => {
-    const [userViewContent, setUserViewContent] = useState({
-        view: "Top Chart"
-    })
+    const [userViewType, setUserViewType] = useState('Top Chart')
     const handleViewOpen = (labelBtn) => {
-        setUserViewContent({view: labelBtn})
+        console.log(labelBtn)
+        setUserViewType(labelBtn)
     }
+
+    const render = renderTabFactory({key: userViewType === structureMenu.logout ? structureMenu.topChart : userViewType})
+
     return (
         <UserPageCnt>
             <Header
                 viewClick={handleViewOpen}
-                userHandleClick={userViewContent}
+                viewContent={userViewType}
             />
-            {userPageRenderMap[userViewContent.view]}
+            {render}
         </UserPageCnt>
     )
 }

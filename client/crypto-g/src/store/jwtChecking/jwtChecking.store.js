@@ -1,4 +1,3 @@
-// TODO add class for cryptoApi
 import {makeAutoObservable} from "mobx";
 import {GET, POST} from "../requests/request";
 import {ACCESS_ROUTE, REFRESH_TOKEN_ROUT} from "../../serverRouting/switch";
@@ -17,7 +16,6 @@ class JwtCheckingStore {
             const resReauthorise = await POST( ACCESS_ROUTE, data, data)
             setLocalStorage({nickName: resReauthorise.data.nickName, jwt: resReauthorise.data.jwt}, 'rememberMe')
             await GlobalStore.addResponseToGlobalStore({nickName: resReauthorise.data.nickName, jwt: resReauthorise.data.jwt})
-            console.log("resReauthorise", resReauthorise)
         } catch (err) {
             console.log(err)
         }

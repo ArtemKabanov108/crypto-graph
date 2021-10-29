@@ -6,8 +6,7 @@ import {
   JwtRefreshToken,
   JwtRefreshDocument,
 } from '../schemas/jwt-session-schema';
-import * as bcrypt from 'bcrypt';
-import {IUserList} from "../../common/interfaces";
+import { IUserList } from '../../common/interfaces';
 
 @Injectable()
 export class UserService {
@@ -25,18 +24,6 @@ export class UserService {
     }
   }
 
-  async userExists(userEmail?: string, id?: string): Promise<number> {
-    try {
-      if (userEmail) {
-        return this.userModel.findOne({ email: userEmail }).count();
-      } else {
-        return this.userModel.findById(id).count();
-      }
-    } catch (err) {
-      throw new NotFoundException(err);
-    }
-  }
-
   async findUser(id: string): Promise<User> {
     try {
       return this.userModel.findById(Types.ObjectId(id)).lean().exec();
@@ -47,24 +34,24 @@ export class UserService {
 
   // TODO not correct method (str. 36 mast will be id)
   async getFavoriteList(id: string): Promise<IUserList> {
-    const { watchlist, _id } = await this.userModel
-      .findOne({ _id: id })
-      .exec();
-    return { watchlist, userId: _id };
+    try {
+      const { watchlist, _id } = await this.userModel.findOne({ _id: Types.ObjectId(id) }).exec();
+      return { watchlist, userId: _id };
+    } catch (err) {
+      throw new NotFoundException(err, 'The favorite list not found or problems with DB');
+    }
     // variant response server with all data user
     // return await this.userModel.findOne({ email: email }).exec();
   }
 
-  async setCurrentRefreshToken(refreshToken: string, userId: Types.ObjectId) {
+  async setFavorite(id: string, cryptoFavorite): Promise<IUserList> {
     try {
-      console.log('userId', { userId });
-      const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-      await this.jwtModel.findOneAndUpdate(
-        { user: userId },
-        { refreshToken: currentHashedRefreshToken },
-      );
+      const { watchlist, _id } = await this.userModel
+        .findOneAndUpdate({ _id: Types.ObjectId(id) }, { $push: { watchlist: cryptoFavorite } })
+        .exec();
+      return { watchlist, userId: _id };
     } catch (err) {
-      throw new NotFoundException(err);
+      throw new NotFoundException(err, 'The favorite list not found or problems with DB');
     }
   }
 }

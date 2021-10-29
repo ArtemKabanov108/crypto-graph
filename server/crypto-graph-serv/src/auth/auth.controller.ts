@@ -119,7 +119,7 @@ export class AuthController {
       const refreshToken = this.authService.getCookieWithJwtRefreshToken(
         userForRefresh._id,
       );
-      await this.userService.setCurrentRefreshToken(
+      await this.authService.setCurrentRefreshToken(
         refreshToken,
         userForRefresh._id,
       );

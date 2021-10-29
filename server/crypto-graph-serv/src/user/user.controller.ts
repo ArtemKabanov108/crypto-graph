@@ -1,8 +1,8 @@
 import {
-  BadRequestException,
+  BadRequestException, Body,
   Controller,
   Get,
-  HttpStatus,
+  HttpStatus, Post,
   Req,
   Res,
   UseGuards,
@@ -12,15 +12,15 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ValidationErrorObject } from '../common/objects/ValidationErrorObject';
 import { UserService } from './services/user.service';
-import {IRequestWithUser} from "../common/interfaces";
+import { IRequestWithUser } from '../common/interfaces';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('/favorites')
+  @Get('/get-favorite')
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Logged user.' })
+  @ApiOperation({ summary: 'Get list favorite cryptocurrency.' })
   @ApiResponse({
     status: 400,
     description: 'Bad request error',
@@ -36,9 +36,29 @@ export class UserController {
     @Req() request: IRequestWithUser,
   ): Promise<Response> {
     const favorites = await this.userService.getFavoriteList(request.user.id);
-    if (!favorites) {
-      throw new BadRequestException(['Register Error']);
-    }
+    console.log('0000000000000', favorites)
+    return response.status(HttpStatus.OK).json(favorites);
+  }
+
+  @Post('/set-favorite')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Add favorite cryptocurrency.' })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request error',
+    type: ValidationErrorObject,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The favorite cryptocurrency - added!',
+    type: Object, // TODO add interface.
+  })
+  async setFavorite(
+    @Res() response: Response,
+    @Req() request: IRequestWithUser,
+    @Body() body: Object
+  ): Promise<Response> {
+    const favorites = await this.userService.setFavorite(request.user.id, body);
     return response.status(HttpStatus.OK).json(favorites);
   }
 }

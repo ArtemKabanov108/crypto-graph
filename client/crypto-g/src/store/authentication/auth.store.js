@@ -16,8 +16,8 @@ class AuthStore {
             const {data} = await POST( LOGIN_ROUTE, payloadLogin)
             setLocalStorage(data, 'rememberMe')
             await GlobalStore.addResponseToGlobalStore(data)
-        } catch (e) {
-            console.log(e)
+        } catch (err) {
+            console.log(err)
         }
     }
 
@@ -29,8 +29,8 @@ class AuthStore {
             const {data} = await POST( REGISTER_ROUTE, payloadRegister, options)
             setLocalStorage(data, 'rememberMe')
             await GlobalStore.addResponseToGlobalStore(data)
-        } catch (e) {
-            console.log(e)
+        } catch (err) {
+            console.log(err)
         }
     }
 

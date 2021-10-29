@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect } from "react";
 import {Glassbtn} from "../common/Buttons/Glassbutton/Glassbutton";
 import {Logo} from "../common/Logo/Logo";
 import {BtnCtnr, HeaderContainer} from "./header.style";
@@ -10,24 +10,16 @@ import {ButtonsGroup} from "../common/Buttons/ButtonsGrup/ButtonsGroup";
 import GlobalStore from "../../store/GlobalStore/global.store"
 import AuthStore from "../../store/authentication/auth.store"
 import {observer} from "mobx-react-lite";
+import ModalStore from "../../store/modalWindow/modal.store"
 
-export const Header = observer(({viewClick, userHandleClick}) => {
-    const [toggleState, setToggle] = useState(false)
-
-    const handleOpenModal = () => {
-        setToggle(true)
-    }
-
-    const handleCloseModal = () => {
-        setToggle(false)
-    }
+export const Header = observer(({viewClick, viewContent}) => {
 
     useEffect(() => {
-        (userHandleClick?.view === structureMenu.logout) && AuthStore.handleLogOutUser();
-    }, [userHandleClick])
+        (viewContent === structureMenu.logout) && AuthStore.handleLogOutUser();
+    }, [viewContent])
 
     useEffect(() => {
-        GlobalStore.globalStorageForAuth.nickName && setToggle(false)
+        GlobalStore.globalStorageForAuth.nickName && ModalStore.openModal()
     }, [GlobalStore.globalStorageForAuth.nickName])
 
     return (
@@ -40,12 +32,12 @@ export const Header = observer(({viewClick, userHandleClick}) => {
                             <Glassbtn
                                 background={colors.transparentBackgroundZero}
                                 text={'LogIn / Registration'}
-                                handleClick={handleOpenModal}
+                                handleClick={ModalStore.openModal}
                                 fontSize={'1.2'}
                             />
                             <ModalWindow
-                                toggle={toggleState}
-                                closeModal={handleCloseModal}
+                                toggle={ModalStore.toggleState}
+                                closeModal={ModalStore.closeModal}
                                 children={<ToggleFormTemplate/>}
                             />
                         </>
