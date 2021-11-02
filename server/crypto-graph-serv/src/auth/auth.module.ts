@@ -10,7 +10,7 @@ import { JwtStrategy } from './strategies/jwt-auth.stategy';
 import { JwtRefreshTokenStrategy } from './strategies/jwt-refresh.strategy';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtRefreshToken, JwtSchema } from '../user/schemas/jwt-session-schema';
-import {User, UserSchema} from "../user/schemas/user-schema";
+import { User, UserSchema } from '../user/schemas/user-schema';
 
 @Global()
 @Module({

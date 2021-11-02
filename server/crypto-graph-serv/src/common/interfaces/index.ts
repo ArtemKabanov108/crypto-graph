@@ -71,3 +71,44 @@ export interface ILogin {
 export interface IMessage {
   message: string;
 }
+
+export interface IParamsCrypto {
+  vs_currency: string;
+  from: number;
+  to: number;
+}
+
+export interface IGeckoResponce {
+  /**
+   * Whether the response status code returned a successful code (>200 && <300).
+   */
+  success: boolean;
+  /**
+   * The response status message
+   */
+  message: string;
+  /**
+   * The response status code
+   */
+  code: number;
+  /**
+   * The body data in JSON format from the request.
+   */
+  data: any;
+}
+
+export interface IParseData {
+  id: string;
+  symbol: string;
+  image: {
+    thumb: string;
+    small: string;
+    large: string;
+  };
+  current_price: {
+    [key: string]: string;
+  };
+  market_cap: {
+    [key: string]: string;
+  };
+}

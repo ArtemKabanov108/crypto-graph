@@ -29,7 +29,7 @@
     "@nestjs/passport": "^7.1.6",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^4.8.2",
-    "@types/coingecko-api": "^1.0.1",
+    "@types/coingecko-api": "^1.0.2",
     "@types/passport": "^1.0.7",
     "@types/passport-google-oauth20": "^2.0.9",
     "bcrypt": "^5.0.1",

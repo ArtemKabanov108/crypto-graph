@@ -18,7 +18,13 @@ export const GET = async (route, payloadForConfigGET) => {
     try{
         return await axios.get(`${SERVER_URL}${route}`, {
             withCredentials: true,
-            headers: {authorization: payloadForConfigGET?.jwt
+            headers: {
+                authorization: payloadForConfigGET?.jwt,
+                body: {
+                    vs_currency: "usd",
+                    from: new Date().getDate() - 1,
+                    to: Date.now()
+                }
             }
         })
     } catch (err) {

@@ -122,13 +122,13 @@ export class AuthService {
       const isMatch = await this.isMatchPassword(password, user.password);
       if (isMatch) {
         const tokenRefresh = this.getCookieWithJwtRefreshToken(user._id);
-        const entitiRefreshToken: JwtRefreshToken = {
+        const entityRefreshToken: JwtRefreshToken = {
           user: user._id,
           email: user.email,
           role: user.role,
           refreshToken: tokenRefresh,
         };
-        await this.checkUserByRefreshTokenAndUpdate(entitiRefreshToken);
+        await this.checkUserByRefreshTokenAndUpdate(entityRefreshToken);
         return { LoggedUser: user, tokenRefresh };
       }
     } catch (err) {
