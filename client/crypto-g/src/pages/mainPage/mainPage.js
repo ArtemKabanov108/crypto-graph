@@ -56,42 +56,38 @@ export const MainPage = observer(
             }
             ])
 
-        // useEffect(() => {
-        //
-        //     CryptoStore.getCryptoList().then(({data}) => {
-        //         console.log("00000000000000", data)
-        //         setCryptoGraphData([{"id": data.id, "data": [{"x": data.id, "y": ''}]}])
-        //     })
-        //
-        // }, [])
+        useEffect(() => {
+            ( async () => {
+                try {
+                   const cryptoResArr = await CryptoStore.getCryptoList()
+                    const cryptoArr = cryptoResArr.map(({coin, data}) => {
+                      return {
+                            id: coin,
+                            data: data?.price_average
+                        }
+                    })
+                    setCryptoGraphData(cryptoArr)
+                } catch (err) {
+                    console.log(err)
+                }
+            })()
 
+        }, [])
+        console.log("77777777777", cryptoGraphData)
         return (
             <>
                 <Header />
                 <Surface
                     wrapping={true}
                 >
-                    <Card>
-                        <MyResponsiveBump data={arr}/>
-                    </Card>
-                    <Card>
-                        <MyResponsiveBump data={arr}/>
-                    </Card>
-                    <Card>
-                        <MyResponsiveBump data={arr}/>
-                    </Card>
-                    <Card>
-                        <MyResponsiveBump data={arr}/>
-                    </Card>
-                    <Card>
-                        <MyResponsiveBump data={arr}/>
-                    </Card>
-                    <Card>
-                        <MyResponsiveBump data={arr}/>
-                    </Card>
-                    <Card>
-                        <MyResponsiveBump data={arr}/>
-                    </Card>
+                    {cryptoGraphData.map((item) => {
+                        return (
+                            <Card>
+                                <MyResponsiveBump key={item.id} data={[item]}/>
+                            </Card>
+                        )
+                    })}
+
                 </Surface>
             </>
         )

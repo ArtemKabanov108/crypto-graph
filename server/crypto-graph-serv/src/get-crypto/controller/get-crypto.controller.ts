@@ -16,8 +16,8 @@ import { Response } from 'express';
 export class GetCryptoController {
   constructor(private readonly getCryptocurrency: GetCryptoService) {}
 
-  @Get('get-common-list')
-  // @UseGuards(JwtAuthGuard)
+  @Get('get-user-favorites')
+  @UseGuards(JwtAuthGuard)
   async getCryptoCurrency() {
     const list = await this.getCryptocurrency.getCoinsList();
     console.log("get crypto me", list)

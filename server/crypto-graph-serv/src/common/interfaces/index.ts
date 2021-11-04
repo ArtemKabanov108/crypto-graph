@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { User } from '../../user/schemas/user-schema';
+import {weekAverager} from "../helpers/weekAverager";
 
 export interface ISession {
   sessionId: string;
@@ -110,5 +111,26 @@ export interface IParseData {
   };
   market_cap: {
     [key: string]: string;
+  };
+}
+
+export interface IWeek {
+  Mon: number;
+  Tu: number;
+  We: number;
+  Thu: number;
+  Fr: number;
+  Sun: number;
+  Sat: number;
+}
+
+export interface ICurrencyCalculation {
+  coin: string;
+  success: string;
+  message: string;
+  code: number;
+  data: {
+    price_average: IWeek;
+    market_cap_average: IWeek;
   };
 }

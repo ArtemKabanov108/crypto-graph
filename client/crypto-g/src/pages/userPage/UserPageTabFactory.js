@@ -12,9 +12,7 @@ const constructProps = (typeComponent) => ({
     tabType: typeComponent
 })
 
-
 export const renderTabFactory = (props) => {
-    console.log(props)
     const Component = userPageTabFactory[props.key]
     return <Component {...constructProps(props.key)}/>
 }

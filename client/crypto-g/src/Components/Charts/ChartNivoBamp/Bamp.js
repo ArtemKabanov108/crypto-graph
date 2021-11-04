@@ -8,6 +8,7 @@ export const MyResponsiveBump = ({data}) => {
         <ResponsiveBump
             data={data}
             theme={neonTheme}
+            colors={["hsl(54,100%,65%)"]}
             margin={{top: 40, right: 100, bottom: 40, left: 60}}
             lineWidth={5}
             activeLineWidth={6}
