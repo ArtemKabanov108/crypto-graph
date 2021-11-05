@@ -1,7 +1,7 @@
 import { IWeek } from '../interfaces';
 import { rounder } from './rounder';
 
-export function weekAverager(weekData: []): any {
+export function weekAverager(weekData: []): Array<IWeek> {
   const week: any = [
     { x: 'Mon', y: 0 },
     { x: 'Tu', y: 0 },
@@ -22,6 +22,6 @@ export function weekAverager(weekData: []): any {
   });
   return week.map(({ x, y }) => {
     y = y / 24;
-    return { x: x, y: rounder(y, 2) };
+    return { x: x, y: `${rounder(y, 2)} $` };
   });
 }

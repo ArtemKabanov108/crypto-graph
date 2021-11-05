@@ -55,7 +55,6 @@ export class AuthController {
     @Res() response: Response,
   ): Promise<Response> {
     const { receivedUser, accessToken } = await this.authService.register(body);
-    if (!receivedUser) throw new BadRequestException(['Register Error']);
     const refreshToken = this.authService.getCookieWithJwtRefreshToken(
       receivedUser._id,
     );

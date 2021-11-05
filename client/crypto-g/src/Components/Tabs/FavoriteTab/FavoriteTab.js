@@ -1,12 +1,12 @@
 import {Card} from "../../common/Card/Card";
 import {MyResponsiveBump} from "../../Charts/ChartNivoBamp/Bamp";
-import {arr} from "../../../pages/mainPage/mainPage";
 import {Surface} from "../../common/Surfaces/OrderingSurface/OrderingSurface";
 import React, {useEffect, useState} from "react";
 import UserRequestStore from "../../../store/userRequest/userReques.store"
+import CryptoStore from "../../../store/cryptocurrency/crypto.store"
 
 export const FavoriteTab = ({tabType}) => {
-
+const arr = CryptoStore.cryptoStore
     const [favoriteList, setFavoriteList] = useState({})
 
     useEffect(() => {

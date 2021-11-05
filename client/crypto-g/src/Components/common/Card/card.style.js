@@ -38,6 +38,7 @@ export const StarContainer = styled.div`
 export const CryptoName = styled.div`
   display: flex;
   justify-content: center;
+  text-transform: capitalize;
 `;
 
 export const CardGraph = styled.div`

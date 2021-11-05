@@ -9,7 +9,7 @@ export const MyResponsiveBump = ({data}) => {
             data={data}
             theme={neonTheme}
             colors={["hsl(54,100%,65%)"]}
-            margin={{top: 40, right: 100, bottom: 40, left: 60}}
+            margin={{top: 40, right: 90, bottom: 40, left: 80}}
             lineWidth={5}
             activeLineWidth={6}
             inactiveLineWidth={3}
@@ -46,10 +46,10 @@ export const MyResponsiveBump = ({data}) => {
             axisLeft={{
                 tickSize: 5,
                 tickPadding: 5,
-                tickRotation: 0,
-                legend: 'currency',
+                tickRotation: 5,
+                legend: '',
                 legendPosition: 'middle',
-                legendOffset: -40
+                legendOffset: -40,
             }}
         />
     )

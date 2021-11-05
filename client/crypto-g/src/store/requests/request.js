@@ -20,11 +20,6 @@ export const GET = async (route, payloadForConfigGET) => {
             withCredentials: true,
             headers: {
                 authorization: payloadForConfigGET?.jwt,
-                body: {
-                    vs_currency: "usd",
-                    from: new Date().getDate() - 1,
-                    to: Date.now()
-                }
             }
         })
     } catch (err) {

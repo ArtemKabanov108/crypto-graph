@@ -27,7 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       secretOrKey: configService.get('server.jwtSecret'),
     });
   }
-  // attention! method validate() has stump for type!
+
   async validate(payload: IJwtUser): Promise<IResponseJWTStrategy> {
     console.log('attention! works JwtStrategy!', payload);
     //TODO

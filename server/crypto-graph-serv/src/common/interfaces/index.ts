@@ -115,13 +115,8 @@ export interface IParseData {
 }
 
 export interface IWeek {
-  Mon: number;
-  Tu: number;
-  We: number;
-  Thu: number;
-  Fr: number;
-  Sun: number;
-  Sat: number;
+  x: string;
+  y: number;
 }
 
 export interface ICurrencyCalculation {

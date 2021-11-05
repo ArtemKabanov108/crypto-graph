@@ -39,7 +39,6 @@ export const Card = ({children, cryptoName, cryptoId, width, height}) => {
                         favoriteAdd={favoriteToggle}
                     />
                 }
-
             </HeaderCard>
             <CardGraph
                 heightCard={height}
