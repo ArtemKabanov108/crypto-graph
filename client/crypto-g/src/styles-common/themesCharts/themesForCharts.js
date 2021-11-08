@@ -31,7 +31,7 @@ export const neonTheme = {
     },
     legends: {
         text: {
-            fill: '#333333'
+            fill: '#ffffff'
         }
     },
     labels: {
@@ -66,7 +66,7 @@ export const neonTheme = {
     },
     crosshair: {
         line: {
-            stroke: '#000000',
+            stroke: '#ffffff',
             strokeWidth: 1,
             strokeOpacity: 0.75,
             strokeDasharray: '6 6'

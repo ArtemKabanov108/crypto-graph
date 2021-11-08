@@ -1,11 +1,11 @@
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable, toJS} from "mobx";
 import {GET, POST} from "../requests/request";
 import {GET_FAVORITES, SET_FAVORITE} from "../../serverRouting/switch";
 import {getLocalStorage} from "../../helpers/helpersFoo";
 
 
 class UserRequestStore {
-    userStore = {}
+    userStore = []
     constructor() {
         makeAutoObservable(this)
     }
@@ -23,8 +23,9 @@ class UserRequestStore {
         try {
             const jwtForFavorites = getLocalStorage('rememberMe')
             const {data} = await GET( GET_FAVORITES, jwtForFavorites)
-            // this.userStore = data
-            console.log("response GET favorite list", data)
+            this.userStore = data.watchlist
+            toJS(this.userStore)
+            console.log("User Store favorite list", toJS(this.userStore))
             return data
         } catch (err) {
             console.log(err)

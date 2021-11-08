@@ -34,16 +34,13 @@ export class GetCryptoService {
         clearData.map(async ({ id }, idx) => {
           try {
             if (idx <= 7) return {coin: id, ...await this.geckoApiReq.coins.fetchMarketChartRange(id, params)}
-            console.log('5555555555555555555555');
             if (idx > 7 && idx <= 14) return {coin: id, ...await this.geckoApiReq.coins.fetchMarketChartRange(id, params)}
-            console.log('8888888888888888888888')
           } catch (err) {
-            console.log({err});
+            console.log({ err });
             return err;
           }
         }),
       );
-      console.log(frog)
       return priceAverager(frog);
     } catch (err) {
       throw new BadRequestException( err, 'Api not response :(');

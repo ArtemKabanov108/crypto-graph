@@ -25,7 +25,7 @@ class CryptoStore {
         try {
             const jwtForFavorites = getLocalStorage('rememberMe')
             const {data} = await GET( GET_CRYPTO, jwtForFavorites)
-            this.cryptoStore = data.map(({coin, data}) => ({ id: coin, data: data.price_average }))
+            this.cryptoStore = data.map(({coin, data}) => ({ id: coin, color: "hsl(257, 70%, 50%)", data: data.price_average }))
             toJS(this.cryptoStore)
             console.log("We have the response, guys!", data)
             if (this.cryptoStore.length) {

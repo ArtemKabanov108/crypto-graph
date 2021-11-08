@@ -22,6 +22,6 @@ export function weekAverager(weekData: []): Array<IWeek> {
   });
   return week.map(({ x, y }) => {
     y = y / 24;
-    return { x: x, y: `${rounder(y, 2)} $` };
+    return { x: x, y: rounder(y, 2) };
   });
 }

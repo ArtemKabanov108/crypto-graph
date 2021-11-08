@@ -1,14 +1,15 @@
 import React from 'react';
 import PacmanLoader from 'react-spinners/PacmanLoader';
-import {loaderStyles} from "./loader.styles";
-
+import {loaderStyles, LoaderContainer } from "./loader.styles";
 
 export const Loader = () => {
     return (
-        <PacmanLoader
-            size='60'
-            color='#faff03'
-            css={loaderStyles}
-        />
+        <LoaderContainer>
+            <PacmanLoader
+                size='8vw'
+                color='#faff03'
+                css={loaderStyles}
+            />
+        </LoaderContainer>
     )
 }
