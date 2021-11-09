@@ -7,6 +7,7 @@ import {Link} from "../../common/Links/Link";
 import {Glassbtn} from "../../common/Buttons/Glassbutton/Glassbutton";
 import {colors} from "../../../styles-common/common.style";
 import AuthStore from "../../../store/authentication/auth.store"
+import ModalStore from "../../../store/modalWindow/modal.store";
 
 export const LoginForm = ({handleLinkToRegister}) => {
 
@@ -63,6 +64,7 @@ export const LoginForm = ({handleLinkToRegister}) => {
                     fontSize={'1'}
                 />
                 <Glassbtn
+                    handleClick={ModalStore.closeModal}
                     buttonType={"submit"}
                     padding={'8px 30px 8px 30px'}
                     text={'Login'}

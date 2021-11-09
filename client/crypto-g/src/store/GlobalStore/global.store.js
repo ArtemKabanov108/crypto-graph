@@ -1,4 +1,4 @@
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable, toJS} from "mobx";
 
 class GlobalStore {
 
@@ -14,6 +14,7 @@ class GlobalStore {
         try {
             const {nickName, jwt} = payloadAuth
             this.globalStorageForAuth = {nickName, jwt}
+            toJS(this.globalStorageForAuth)
         } catch (e) {
             console.log(e)
         }

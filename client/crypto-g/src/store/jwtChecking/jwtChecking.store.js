@@ -2,7 +2,7 @@ import {makeAutoObservable} from "mobx";
 import {GET, POST} from "../requests/request";
 import {ACCESS_ROUTE, REFRESH_TOKEN_ROUT} from "../../serverRouting/switch";
 import GlobalStore from "../GlobalStore/global.store"
-import {setLocalStorage} from "../../helpers/helpersFoo";
+import {getLocalStorage, setLocalStorage} from "../../helpers/helpersFoo";
 
 class JwtCheckingStore {
 
@@ -21,14 +21,16 @@ class JwtCheckingStore {
         }
     }
 
-    async addResponseToJwtCheckingStore(payloadJwt) {
+    async addResponseToJwtCheckingStore() {
         try {
-            const res = await POST( ACCESS_ROUTE, {jwt: payloadJwt.jwt}, payloadJwt.jwt)
+            const {jwt} = getLocalStorage('rememberMe')
+            if (jwt) {
+                const res = await POST( ACCESS_ROUTE, {jwt}, {jwt})
 
-            if(res === undefined) await this.reauthorise(payloadJwt)
+                if(res === undefined) await this.reauthorise(jwt)
 
-            if(res.data?.jwt) await GlobalStore.addResponseToGlobalStore({nickName: res.data.nickName, jwt: res.data.jwt})
-
+                if(res.data?.jwt) await GlobalStore.addResponseToGlobalStore({nickName: res.data.nickName, jwt: res.data.jwt})
+            }
         } catch (err) {
             console.log(err)
         }

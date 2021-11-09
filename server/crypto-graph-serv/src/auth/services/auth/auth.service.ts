@@ -18,7 +18,7 @@ import {
 } from '../../../common/interfaces';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtRefreshDocument, JwtRefreshToken } from "../../../user/schemas/jwt-session-schema";
-import { CreateUserDto } from '../../../user/dto/user.dto';
+import { CreateUserDto } from '../../dto/auth.dto';
 import { User, UserDocument } from '../../../user/schemas/user-schema';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {Header} from "../../Components/Header/Header";
 import {observer} from "mobx-react-lite";
 import {Card} from "../../Components/common/Card/Card";
@@ -10,11 +10,10 @@ import {Loader} from "../../Components/common/Loader/Loader";
 
 export const MainPage = observer(
     () => {
-
         useEffect(() => {
             ( async () => {
                 try {
-                    await CryptoStore.pingCrypto()
+                    await CryptoStore.pingMaker()
                 } catch (err) {
                     console.log(err)
                 }

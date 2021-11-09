@@ -18,10 +18,6 @@ export const Header = observer(({viewClick, viewContent}) => {
         (viewContent === structureMenu.logout) && AuthStore.handleLogOutUser();
     }, [viewContent])
 
-    useEffect(() => {
-        GlobalStore.globalStorageForAuth.nickName && ModalStore.openModal()
-    }, [GlobalStore.globalStorageForAuth.nickName])
-
     return (
         <HeaderContainer>
             <Logo/>

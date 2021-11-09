@@ -2,6 +2,7 @@ import {makeAutoObservable, toJS} from "mobx";
 import {GET} from "../requests/request";
 import {GET_CRYPTO} from "../../serverRouting/switch";
 import {getLocalStorage} from "../../helpers/helpersFoo";
+import JwtCheckingStore from "../jwtChecking/jwtChecking.store"
 
 class CryptoStore {
     cryptoStore = []
@@ -21,23 +22,32 @@ class CryptoStore {
         }
     }
 
-    async pingCrypto() {
+    async getCryptocurrencyData() {
         try {
             const jwtForFavorites = getLocalStorage('rememberMe')
             const {data} = await GET( GET_CRYPTO, jwtForFavorites)
             this.cryptoStore = data.map(({coin, data}) => ({ id: coin, color: "hsl(257, 70%, 50%)", data: data.price_average }))
             toJS(this.cryptoStore)
             console.log("We have the response, guys!", data)
+            await this.pingMaker()
+            await JwtCheckingStore.addResponseToJwtCheckingStore()
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    async pingMaker() {
+        try {
             if (this.cryptoStore.length) {
                 setTimeout( async () => {
                     try {
-                        console.log("start")
-                        await this.pingCrypto();
-                        console.log("end")
+                        await this.getCryptocurrencyData();
                     } catch (err) {
                         console.log(err)
                     }
                 }, 30000)
+            } else {
+                await this.getCryptocurrencyData();
             }
         } catch (err) {
             console.log(err)

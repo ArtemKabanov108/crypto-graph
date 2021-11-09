@@ -1,19 +1,30 @@
 import {makeAutoObservable, toJS} from "mobx";
-import {GET, POST} from "../requests/request";
-import {GET_FAVORITES, SET_FAVORITE} from "../../serverRouting/switch";
+import {DELETE, GET, POST} from "../requests/request";
+import {DELETE_FAVORITE, GET_FAVORITES, SET_FAVORITE} from "../../serverRouting/switch";
 import {getLocalStorage} from "../../helpers/helpersFoo";
 
 
 class UserRequestStore {
-    userStore = []
+    userFavoriteStore = []
     constructor() {
         makeAutoObservable(this)
     }
 
-    async setFavorite(payloadSetFavorite) {
+    async setFavoriteCrypto(payloadSetFavorite) {
         try {
-            const {data} = await POST( SET_FAVORITE, payloadSetFavorite)
-            console.log("response Set favorite", data)
+            const jwtForFavorites = getLocalStorage('rememberMe')
+            const {data} = await POST( SET_FAVORITE, payloadSetFavorite, jwtForFavorites)
+            console.log("response Set the favorite", data)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    async deleteFavoriteCrypto(payloadDeleteFavorite) {
+        try {
+            const jwtForFavorites = getLocalStorage('rememberMe')
+            const {data} = await DELETE( DELETE_FAVORITE, payloadDeleteFavorite,  jwtForFavorites)
+            console.log("response delete the favorite", data)
         } catch (err) {
             console.log(err)
         }
@@ -23,9 +34,8 @@ class UserRequestStore {
         try {
             const jwtForFavorites = getLocalStorage('rememberMe')
             const {data} = await GET( GET_FAVORITES, jwtForFavorites)
-            this.userStore = data.watchlist
-            toJS(this.userStore)
-            console.log("User Store favorite list", toJS(this.userStore))
+            this.userFavoriteStore = data.watchlist
+            toJS(this.userFavoriteStore)
             return data
         } catch (err) {
             console.log(err)

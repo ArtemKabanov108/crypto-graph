@@ -4,9 +4,10 @@ import {MyResponsiveBump} from "../../Charts/ChartNivoBamp/Bamp";
 import {Surface} from "../../common/Surfaces/OrderingSurface/OrderingSurface";
 import CryptoStore from "../../../store/cryptocurrency/crypto.store"
 import {WrapperLoader} from "../../common/wrapperLoader/WrapperLoader";
+import {toJS} from "mobx";
 
-export const TopChart = () => {
-    const crypto_storeTopChart = CryptoStore.cryptoStore
+export const TopChart = ({tabType}) => {
+    const crypto_storeTopChart = toJS(CryptoStore?.cryptoStore)
     return (
         <Surface
             centring={true}
@@ -15,6 +16,7 @@ export const TopChart = () => {
                 data={crypto_storeTopChart}
                 children={
                     <Card
+                        pageType={tabType}
                         width={'100rem'}
                         height={'45rem'}
                     >

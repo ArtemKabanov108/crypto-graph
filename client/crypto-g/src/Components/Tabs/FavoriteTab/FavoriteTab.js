@@ -17,10 +17,8 @@ export const FavoriteTab = ({tabType}) => {
 
         ( async () => {
             try {
-                await UserRequestStore.getFavoritesList()
-
                const filtratedFavorite = toJS(crypto_store).filter(({id, data}) => {
-                    const arr = toJS(UserRequestStore.userStore)
+                    const arr = toJS(UserRequestStore.userFavoriteStore)
                     if (arr.includes(id)) return {id, data}
                     return false;
                 } )
@@ -31,9 +29,6 @@ export const FavoriteTab = ({tabType}) => {
         })()
     }, [tabType])
 
-    console.log("Crypto store", toJS(crypto_store))
-
-    console.log("favoriteListfavoriteList", favoriteList)
     return (
         <Surface
             wrapping={true}
@@ -44,6 +39,7 @@ export const FavoriteTab = ({tabType}) => {
                     favoriteList.map(({id, data}) => {
                         return (
                             <Card
+                                pageType={tabType}
                                 cryptoName={id}
                                 key={id}
                             >

@@ -41,7 +41,6 @@ class AuthStore {
             if (res.status === 200) {
                 localStorage.clear()
                 GlobalStore.clearGlobalStore()
-                // window.location.reload()
             }
         } catch (err) {
             console.log(err)

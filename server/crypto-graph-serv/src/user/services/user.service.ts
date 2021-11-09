@@ -44,7 +44,7 @@ export class UserService {
     // return await this.userModel.findOne({ email: email }).exec();
   }
 
-  async setFavorite(id: string, cryptoFavorite): Promise<IUserList> {
+  async setFavorite(id: string, cryptoFavorite: string): Promise<IUserList> {
     try {
       const { watchlist, _id } = await this.userModel
         .findOneAndUpdate({ _id: Types.ObjectId(id) }, { $push: { watchlist: cryptoFavorite } })
@@ -53,5 +53,16 @@ export class UserService {
     } catch (err) {
       throw new NotFoundException(err, 'The favorite list not found or problems with DB');
     }
+  }
+
+  async deleteFavoriteCrypto(id: string, cryptoFavorite: string) {
+    try {
+      const { watchlist, _id } = await this.userModel
+        .findOneAndUpdate({ _id: Types.ObjectId(id) }, { $remove: { watchlist: cryptoFavorite } })
+        .exec();
+    } catch (err) {
+      throw new NotFoundException(err, 'The favorite list not found or problems with DB');
+    }
+
   }
 }

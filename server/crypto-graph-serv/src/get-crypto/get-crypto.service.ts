@@ -4,6 +4,7 @@ import { parsData } from '../common/helpers/parsData';
 import { priceAverager } from '../common/helpers/priceAverager';
 import { toDateNowUnix } from '../common/helpers/dateTransformers/toDateNowUnix';
 import { toWeekDiapason } from '../common/helpers/dateTransformers/toWeekDiapason';
+import {log} from "util";
 
 const CoinGecko = require('coingecko-api');
 
@@ -34,7 +35,9 @@ export class GetCryptoService {
         clearData.map(async ({ id }, idx) => {
           try {
             if (idx <= 7) return {coin: id, ...await this.geckoApiReq.coins.fetchMarketChartRange(id, params)}
+            console.log('after the first promises');
             if (idx > 7 && idx <= 14) return {coin: id, ...await this.geckoApiReq.coins.fetchMarketChartRange(id, params)}
+            console.log('after the second promises');
           } catch (err) {
             console.log({ err });
             return err;

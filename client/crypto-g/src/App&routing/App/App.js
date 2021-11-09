@@ -10,17 +10,6 @@ import {MainPage} from "../../pages/mainPage/mainPage";
 import {UserPage} from "../../pages/userPage/userPage";
 
 const App = observer( () => {
-
-    useEffect(async () => {
-        try {
-          const userDataStorage = localStorage.getItem('rememberMe')
-          const parsData = JSON.parse(userDataStorage)
-          await JwtCheckingStore.addResponseToJwtCheckingStore(parsData)
-
-        } catch (e) {
-            throw new Error(e)
-        }
-    }, [])
     const isAuthed = !!GlobalStore.globalStorageForAuth?.nickName
   return (
       <Router>

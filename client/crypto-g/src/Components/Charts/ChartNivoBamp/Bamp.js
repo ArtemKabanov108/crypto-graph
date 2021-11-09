@@ -4,7 +4,6 @@ import {colors} from "../../../styles-common/common.style";
 import {neonTheme} from "../../../styles-common/themesCharts/themesForCharts";
 
 export const MyResponsiveBump = ({data}) => {
-    console.log("datadata", data)
     return (
         <ResponsiveLine
             data={data}
