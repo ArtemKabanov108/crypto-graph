@@ -10,16 +10,14 @@ import {WrapperLoader} from "../../common/wrapperLoader/WrapperLoader";
 export const FavoriteTab = ({tabType}) => {
 
     const crypto_store = CryptoStore.cryptoStore
-
+    const arr = UserRequestStore.userFavoriteStore
     const [favoriteList, setFavoriteList] = useState([])
 
     useEffect(() => {
-
         ( async () => {
             try {
-               const filtratedFavorite = toJS(crypto_store).filter(({id, data}) => {
-                    const arr = toJS(UserRequestStore.userFavoriteStore)
-                    if (arr.includes(id)) return {id, data}
+               const filtratedFavorite = crypto_store.filter(({id, data}) => {
+                    if (arr?.includes(id)) return {id, data}
                     return false;
                 } )
                 setFavoriteList(filtratedFavorite)

@@ -14,6 +14,8 @@ class UserRequestStore {
         try {
             const jwtForFavorites = getLocalStorage('rememberMe')
             const {data} = await POST( SET_FAVORITE, payloadSetFavorite, jwtForFavorites)
+            this.userFavoriteStore = data
+            toJS(this.userFavoriteStore)
             console.log("response Set the favorite", data)
         } catch (err) {
             console.log(err)
@@ -24,6 +26,8 @@ class UserRequestStore {
         try {
             const jwtForFavorites = getLocalStorage('rememberMe')
             const {data} = await DELETE( DELETE_FAVORITE, payloadDeleteFavorite,  jwtForFavorites)
+            this.userFavoriteStore = data
+            toJS(this.userFavoriteStore)
             console.log("response delete the favorite", data)
         } catch (err) {
             console.log(err)

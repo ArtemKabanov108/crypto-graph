@@ -7,6 +7,7 @@ import {
   JwtRefreshDocument,
 } from '../schemas/jwt-session-schema';
 import { IUserList } from '../../common/interfaces';
+import {favoritesDto} from "../dto/user.dto";
 
 @Injectable()
 export class UserService {
@@ -32,7 +33,6 @@ export class UserService {
     }
   }
 
-  // TODO not correct method (str. 36 mast will be id)
   async getFavoriteList(id: string): Promise<IUserList> {
     try {
       const { watchlist, _id } = await this.userModel.findOne({ _id: Types.ObjectId(id) }).exec();
@@ -44,25 +44,29 @@ export class UserService {
     // return await this.userModel.findOne({ email: email }).exec();
   }
 
-  async setFavorite(id: string, cryptoFavorite: string): Promise<IUserList> {
+  async setFavorite(id: string, cryptoFavorite: string): Promise<string[]> {
     try {
-      const { watchlist, _id } = await this.userModel
+      await this.userModel
         .findOneAndUpdate({ _id: Types.ObjectId(id) }, { $push: { watchlist: cryptoFavorite } })
         .exec();
-      return { watchlist, userId: _id };
+      const { watchlist } = await this.userModel
+        .findOne({ _id: Types.ObjectId(id) })
+        .exec();
+      return watchlist;
     } catch (err) {
       throw new NotFoundException(err, 'The favorite list not found or problems with DB');
     }
   }
 
-  async deleteFavoriteCrypto(id: string, cryptoFavorite: string) {
+  async deleteFavoriteCrypto(id: string, cryptoFavorite: string): Promise<string[]> {
     try {
-      const { watchlist, _id } = await this.userModel
-        .findOneAndUpdate({ _id: Types.ObjectId(id) }, { $remove: { watchlist: cryptoFavorite } })
+      await this.userModel
+        .findOneAndUpdate({ _id: Types.ObjectId(id) }, { $pull: { watchlist: cryptoFavorite }})
         .exec();
+      const { watchlist } = await this.userModel.findOne({ _id: Types.ObjectId(id) }).exec();
+      return watchlist;
     } catch (err) {
       throw new NotFoundException(err, 'The favorite list not found or problems with DB');
     }
-
   }
 }

@@ -16,6 +16,7 @@ import { ValidationErrorObject } from '../common/objects/ValidationErrorObject';
 import { UserService } from './services/user.service';
 import { IRequestWithUser } from '../common/interfaces';
 import { favoritesDto } from './dto/user.dto';
+import {ValidationUserResponse} from "../common/objects/userResponse";
 
 @Controller('user')
 export class UserController {
@@ -53,7 +54,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'The favorite cryptocurrency - added!',
-    type: Object, // TODO add interface.
+    type: ValidationUserResponse,
   })
   async setFavorite(
     @Res() response: Response,
@@ -76,13 +77,14 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'The favorite cryptocurrency - deleted!',
-    type: Object, // TODO add interface.
+    type: ValidationUserResponse,
   })
   async deleteFavorite(
     @Res() response: Response,
-    @Req() request: any,
+    @Req() request: IRequestWithUser,
+    @Body() body: favoritesDto,
   ): Promise<Response> {
-    const favorites = await this.userService.setFavorite(request.user.id, request.cryptoName);
+    const favorites = await this.userService.deleteFavoriteCrypto(request.user.id, body.cryptoName);
     return response.status(HttpStatus.OK).json(favorites);
   }
 }

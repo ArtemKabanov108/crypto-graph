@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import yellowStarSmall from '../../../images/stars/yellowStarSmall.png';
-import paleStar from '../../../images/stars/paleStar.svg';
+import yellowStarSmall from '../../../images/icons/yellowStarSmall.png';
+import paleStar from '../../../images/icons/paleStar.svg';
+import {colors} from "../../../styles-common/common.style";
 
 export const CardCnt = styled.div`
   display: flex;
@@ -40,6 +41,22 @@ export const CryptoName = styled.div`
   justify-content: center;
   text-transform: capitalize;
 `;
+
+export const CurrensyBox = styled.div`
+  font-size: 1rem;
+  margin-left: 20px;
+  margin-top: 30px;
+  animation: breath 800ms ease-out infinite alternate;
+  @keyframes breath {
+    0% {
+      color: #393;
+      text-shadow: 0 0 5px rgba(0, 255, 0, .2);
+    }
+    100% {
+      color: #6f6;
+      text-shadow: 0 0 20px rgba(0, 255, 0, .6);
+    }
+`
 
 export const CardGraph = styled.div`
   width: 100%;

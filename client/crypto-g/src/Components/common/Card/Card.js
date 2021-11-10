@@ -4,24 +4,27 @@ import {
     CardGraph,
     CryptoName,
     HeaderCard,
-    StarContainer
+    StarContainer,
+    CurrensyBox
 } from './card.style';
 import GlobalStore from "../../../store/GlobalStore/global.store"
 import ModalStore from "../../../store/modalWindow/modal.store"
 import UserRequestStore from "../../../store/userRequest/userReques.store"
 import {structureMenu} from "../../Header/structureMenu";
-import {toJS} from "mobx";
-
 export const Card = ({children, cryptoName, width, pageType, height}) => {
 
-    const arrFavorites = toJS(UserRequestStore.userFavoriteStore)
-
+    const arrFavorites = UserRequestStore.userFavoriteStore
+    const isLogIn = GlobalStore.globalStorageForAuth.nickName
     const isLogInUser = GlobalStore.globalStorageForAuth
     const [favoriteToggle, setFavoriteToggle] = useState(false)
 
     useEffect(() => {
         arrFavorites.map(item => (item === cryptoName) && setFavoriteToggle(true))
     }, [pageType])
+
+    useEffect(() => {
+        if (!isLogIn) setFavoriteToggle(false)
+    }, [isLogIn])
 
     const handleFavoriteOnOff = async () => {
         if (isLogInUser?.nickName) {
@@ -49,7 +52,7 @@ export const Card = ({children, cryptoName, width, pageType, height}) => {
             widthCard={width}
         >
             <HeaderCard>
-                <div/>
+                <CurrensyBox>USD</CurrensyBox>
                 <CryptoName>{cryptoName}</CryptoName>
                 {isEnableStar()}
             </HeaderCard>

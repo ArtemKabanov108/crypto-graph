@@ -43,9 +43,11 @@ export const DELETE = async  (route, deletePayload, options) => {
     try {
         return await axios.delete(`${SERVER_URL}${route}`, {
             withCredentials: true,
-            headers: {authorization: options?.jwt,
+            headers: {
+                authorization: options?.jwt,
+            },
             data: deletePayload,
-            }})
+        })
     } catch (err) {
         console.error(err)
     }
