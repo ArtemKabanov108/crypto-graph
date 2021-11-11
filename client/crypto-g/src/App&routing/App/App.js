@@ -1,8 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {MainComponent} from './App.style'
 import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
 import {NoMatChUrl} from "../../pages/404/404";
-import JwtCheckingStore from "../../store/jwtChecking/jwtChecking.store"
 import {Redirect} from "react-router";
 import GlobalStore from "../../store/GlobalStore/global.store";
 import {observer} from "mobx-react-lite";

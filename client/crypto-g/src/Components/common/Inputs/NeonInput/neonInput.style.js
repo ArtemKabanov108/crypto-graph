@@ -13,10 +13,11 @@ export const Input = styled.input`
   color: ${colors.textForInput};
   float: left;
   font-family: inherit;
-  font-size: 13px;
+  font-size: ${({typeForCss}) => (typeForCss === 'password') ? '2rem' : '1rem'} ;
   font-weight: 400;
   letter-spacing: 0.8px;
   text-shadow: 0 -1px 0 #000;
+  
 
   ::placeholder {
     color: #6fa156;

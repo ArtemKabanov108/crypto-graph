@@ -4,7 +4,6 @@ import {Surface} from "../../common/Surfaces/OrderingSurface/OrderingSurface";
 import React, {useEffect, useState} from "react";
 import UserRequestStore from "../../../store/userRequest/userReques.store"
 import CryptoStore from "../../../store/cryptocurrency/crypto.store"
-import {toJS} from "mobx";
 import {WrapperLoader} from "../../common/wrapperLoader/WrapperLoader";
 
 export const FavoriteTab = ({tabType}) => {

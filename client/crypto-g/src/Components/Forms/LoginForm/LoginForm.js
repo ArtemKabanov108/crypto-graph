@@ -33,11 +33,13 @@ export const LoginForm = ({handleLinkToRegister}) => {
     return (
         <Form onSubmit={addToStoreDataLogin}>
             <NeonInput
+                typeInput={'email'}
                 onFormHandle={handleFormEmail}
                 labelText={'Email'}
                 placeholderText={'Enter your email'}
             />
             <NeonInput
+                typeInput={'password'}
                 onFormHandle={handleFormPassword}
                 labelText={'Password'}
                 placeholderText={'Enter your password'}

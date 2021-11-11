@@ -1,6 +1,5 @@
 import React from "react";
 import { ResponsiveLine } from '@nivo/line'
-import {colors} from "../../../styles-common/common.style";
 import {neonTheme} from "../../../styles-common/themesCharts/themesForCharts";
 
 export const MyResponsiveBump = ({data}) => {

@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import yellowStarSmall from '../../../images/icons/yellowStarSmall.png';
 import paleStar from '../../../images/icons/paleStar.svg';
-import {colors} from "../../../styles-common/common.style";
 
 export const CardCnt = styled.div`
   display: flex;

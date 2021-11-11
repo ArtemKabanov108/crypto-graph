@@ -15,8 +15,8 @@ class GlobalStore {
             const {nickName, jwt} = payloadAuth
             this.globalStorageForAuth = {nickName, jwt}
             toJS(this.globalStorageForAuth)
-        } catch (e) {
-            console.log(e)
+        } catch (err) {
+            console.log(err)
         }
     }
 

@@ -107,7 +107,7 @@ export class AuthController {
   @UseGuards(JwtRefreshGuard)
   async refresh(@Req() request: IRequestUser, @Res() response: Response) {
     try {
-      console.log('/auth/refresh-tokens', request.user.userId);
+      // console.log('/auth/refresh-tokens', request.user.userId);
       const userForRefresh = await this.userService.findUser(
         request.user.userId,
       );
