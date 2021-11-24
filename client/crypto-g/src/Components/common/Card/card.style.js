@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import yellowStarSmall from '../../../images/icons/yellowStarSmall.png';
 import paleStar from '../../../images/icons/paleStar.svg';
+import {media_breakpoint_down, media_breakpoint_range} from "../../../styles-common/base.style";
 
 export const CardCnt = styled.div`
   display: flex;
@@ -14,6 +15,10 @@ export const CardCnt = styled.div`
   -webkit-backdrop-filter: blur( 4.0px );
   border-radius: 10px;
   border: 3px solid rgb(255 255 255 / 15% );
+  ${media_breakpoint_range('md', 'sm')} {
+    width: 22rem;
+    margin: .5rem;
+  }
 `;
 
 export const HeaderCard = styled.div`

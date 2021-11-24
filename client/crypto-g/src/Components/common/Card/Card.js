@@ -11,6 +11,7 @@ import GlobalStore from "../../../store/GlobalStore/global.store"
 import ModalStore from "../../../store/modalWindow/modal.store"
 import UserRequestStore from "../../../store/userRequest/userReques.store"
 import {structureMenu} from "../../Header/structureMenu";
+
 export const Card = ({children, cryptoName, width, pageType, height}) => {
 
     const arrFavorites = UserRequestStore.userFavoriteStore
