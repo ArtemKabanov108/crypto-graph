@@ -1,6 +1,5 @@
 import { Request } from 'express';
-import { User } from '../../user/schemas/user-schema';
-import {weekAverager} from "../helpers/weekAverager";
+import { User } from '../../auth/schemas/user-schema';
 
 export interface ISession {
   sessionId: string;

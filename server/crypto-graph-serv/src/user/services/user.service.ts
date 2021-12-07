@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from '../schemas/user-schema';
+import { User, UserDocument } from '../../auth/schemas/user-schema';
 import { Model, Types } from 'mongoose';
 import {
   JwtRefreshToken,
   JwtRefreshDocument,
-} from '../schemas/jwt-session-schema';
+} from '../../auth/schemas/jwt-session-schema';
 import { IUserList } from '../../common/interfaces';
 import {favoritesDto} from "../dto/user.dto";
 

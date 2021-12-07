@@ -8,9 +8,6 @@ export type UserDocument = User & Document;
   timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
 })
 export class User {
-  // TODO
-  // @Prop()
-  // firstName: string;
   @Prop()
   nickname: string;
 

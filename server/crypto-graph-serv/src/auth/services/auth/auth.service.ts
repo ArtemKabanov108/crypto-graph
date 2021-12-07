@@ -1,6 +1,7 @@
 import {
+  BadRequestException,
+  ConflictException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
   ServiceUnavailableException,
   UnauthorizedException,
@@ -17,9 +18,12 @@ import {
   IRegistrationResponse,
 } from '../../../common/interfaces';
 import { InjectModel } from '@nestjs/mongoose';
-import { JwtRefreshDocument, JwtRefreshToken } from "../../../user/schemas/jwt-session-schema";
+import {
+  JwtRefreshDocument,
+  JwtRefreshToken,
+} from '../../schemas/jwt-session-schema';
 import { CreateUserDto } from '../../dto/auth.dto';
-import { User, UserDocument } from '../../../user/schemas/user-schema';
+import { User, UserDocument } from '../../schemas/user-schema';
 
 @Injectable()
 export class AuthService {
@@ -147,7 +151,7 @@ export class AuthService {
     try {
       return await this.userModel.create(CreateUser);
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      throw new BadRequestException(err);
     }
   }
 
@@ -177,7 +181,7 @@ export class AuthService {
     try {
       return await this.jwtModel.create(CreateJwtRefreshToken);
     } catch (err) {
-      throw new ServiceUnavailableException(err);
+      throw new ServiceUnavailableException([err.message]);
     }
   }
 

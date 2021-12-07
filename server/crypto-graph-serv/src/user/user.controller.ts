@@ -16,7 +16,7 @@ import { ValidationErrorObject } from '../common/objects/ValidationErrorObject';
 import { UserService } from './services/user.service';
 import { IRequestWithUser } from '../common/interfaces';
 import { favoritesDto } from './dto/user.dto';
-import {ValidationUserResponse} from "../common/objects/userResponse";
+import { ValidationUserResponse } from '../common/objects/userResponse';
 
 @Controller('user')
 export class UserController {

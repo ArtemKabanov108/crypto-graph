@@ -12,6 +12,7 @@ import { createValidationSchema } from './validation.schemsConfig';
   imports: [
     NestConfigModule.forRoot({
       isGlobal: true,
+      expandVariables: true,
       load: [serverConfig, dbConfig],
       validationSchema: createValidationSchema(),
     }),
