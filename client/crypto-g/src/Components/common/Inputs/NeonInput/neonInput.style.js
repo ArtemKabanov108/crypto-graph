@@ -2,7 +2,8 @@ import styled from "styled-components";
 import {colors} from "../../../../styles-common/common.style";
 
 export const Input = styled.input`
-  display: block;
+  display: flex;
+  margin: 0 auto;
   width: 300px;
   height: 40px;
   padding: 0 10px;
@@ -11,12 +12,12 @@ export const Input = styled.input`
   border-radius: 5px;
   box-shadow: 0 2px 0 #000;
   color: ${colors.textForInput};
-  float: left;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 1rem;
   font-weight: 400;
-  letter-spacing: 0.8px;
+  letter-spacing: 1.2px;
   text-shadow: 0 -1px 0 #000;
+  
 
   ::placeholder {
     color: #6fa156;

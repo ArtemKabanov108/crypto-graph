@@ -7,12 +7,13 @@ export const Modal = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.8);
   position: fixed;
+  z-index: 900;
   top: 0;
   left: 0;
-  opacity: ${({active}) => ( active ?  '1' : '0' )};
-  pointer-events: ${({active}) => ( active ?  "all" : "none")};
+  opacity: ${({active}) => ( (active) ?  '1' : '0' )};
+  pointer-events: ${({active}) => ( (active) ?  "all" : "none")};
   transition: .8s;
 `;
 
@@ -29,5 +30,5 @@ export const ModalContent = styled.div`
   -webkit-backdrop-filter: blur( 4.0px );
   border-radius: 10px;
   border: 2px solid rgb(255 255 255 / 70%);
-  transform: ${({active}) => ((active === true )? "scale(1)" : "scale(0.5)")};
+  transform: ${({active}) => ((active) ? "scale(1)" : "scale(0.5)")};
 `;

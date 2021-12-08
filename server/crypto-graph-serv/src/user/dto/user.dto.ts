@@ -1,33 +1,8 @@
-import {IsEmail, IsMongoId, IsNotEmpty, IsString} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Prop } from '@nestjs/mongoose';
-import { UserRole } from '../../common/types';
+import { IsNotEmpty } from 'class-validator';
 
-export class CreateUserDto {
-  @ApiProperty()
-  @IsMongoId()
-  _id: any;
-
-  @ApiProperty()
-  @IsEmail()
-  email: string;
-
+export class favoritesDto {
   @ApiProperty()
   @IsNotEmpty()
-  password: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  watchlist: string[];
-
-  @ApiProperty()
-  @IsNotEmpty()
-  role: UserRole
-
-  // checking schema....
-  // @ApiProperty()
-  // @IsNotEmpty()
-  // @IsString()
-  // @ApiProperty()
-  // @Prop({ type: Date, required: true })
+  cryptoName: string;
 }

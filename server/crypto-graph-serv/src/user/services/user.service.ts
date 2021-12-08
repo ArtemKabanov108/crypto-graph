@@ -1,11 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from '../schemas/user-schema';
+import { User, UserDocument } from '../../auth/schemas/user-schema';
 import { Model, Types } from 'mongoose';
-import { CreateUserDto } from '../dto/user.dto';
-import { jwtRefreshTokenDto } from '../../auth/dto/jwtSessionDto';
-import { JwtRefreshToken, JwtRefreshDocument } from '../schemas/jwt-session-schema';
-import * as bcrypt from 'bcrypt';
+import {
+  JwtRefreshToken,
+  JwtRefreshDocument,
+} from '../../auth/schemas/jwt-session-schema';
+import { IUserList } from '../../common/interfaces';
+import {favoritesDto} from "../dto/user.dto";
 
 @Injectable()
 export class UserService {
@@ -14,57 +16,57 @@ export class UserService {
     @InjectModel(JwtRefreshToken.name)
     private readonly jwtModel: Model<JwtRefreshDocument>,
   ) {}
-  async create(CreateUser: CreateUserDto): Promise<User> {
-    return await this.userModel.create(CreateUser);
-  }
-
-  async createRefreshJwt(CreateJwtRefreshToken: JwtRefreshToken): Promise<Object> {
-    return await this.jwtModel.create(CreateJwtRefreshToken);
-  }
 
   async findByEmail(email: string): Promise<User> {
-    return this.userModel.findOne({ email: email }).lean().exec();
-  }
-
-  async userExists(userEmail?: string, id?: string): Promise<number> {
-    if (userEmail) {
-      return this.userModel.findOne({ email: userEmail }).count();
-    } else {
-      return this.userModel.findById(id).count();
+    try {
+      return this.userModel.findOne({ email: email }).lean().exec();
+    } catch (err) {
+      throw new NotFoundException(err);
     }
   }
 
   async findUser(id: string): Promise<User> {
-    return this.userModel.findById(Types.ObjectId(id)).lean().exec();
+    try {
+      return this.userModel.findById(Types.ObjectId(id)).lean().exec();
+    } catch (err) {
+      throw new NotFoundException(err);
+    }
   }
-  // TODO not correct method (str. 36 mast will be id)
-  async getFavoriteList(email: string): Promise<any> {
-    const { watchlist, _id } = await this.userModel
-      .findOne({ email: email })
-      .exec();
-    return { watchlist, userId: _id };
+
+  async getFavoriteList(id: string): Promise<IUserList> {
+    try {
+      const { watchlist, _id } = await this.userModel.findOne({ _id: Types.ObjectId(id) }).exec();
+      return { watchlist, userId: _id };
+    } catch (err) {
+      throw new NotFoundException(err, 'The favorite list not found or problems with DB');
+    }
     // variant response server with all data user
     // return await this.userModel.findOne({ email: email }).exec();
   }
 
-  async setCurrentRefreshToken(refreshToken: string, userId: Types.ObjectId) {
-    console.log("userId", {userId})
-    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-    await this.jwtModel.findOneAndUpdate(
-      { user: userId },
-      { refreshToken: currentHashedRefreshToken }
-    );
+  async setFavorite(id: string, cryptoFavorite: string): Promise<string[]> {
+    try {
+      await this.userModel
+        .findOneAndUpdate({ _id: Types.ObjectId(id) }, { $push: { watchlist: cryptoFavorite } })
+        .exec();
+      const { watchlist } = await this.userModel
+        .findOne({ _id: Types.ObjectId(id) })
+        .exec();
+      return watchlist;
+    } catch (err) {
+      throw new NotFoundException(err, 'The favorite list not found or problems with DB');
+    }
   }
 
-  async getUserIfRefreshTokenMatches(refreshToken: string, userId: string) {
-    const refreshTokenOld = await this.jwtModel.findOne({ user: Types.ObjectId(userId) });
-    console.log("refreshTokenOld", {refreshTokenOld})
-    const isRefreshTokenMatching = await bcrypt.compare(
-      refreshToken,
-      refreshTokenOld.refreshToken,
-    );
-    if (isRefreshTokenMatching) {
-      return true;
+  async deleteFavoriteCrypto(id: string, cryptoFavorite: string): Promise<string[]> {
+    try {
+      await this.userModel
+        .findOneAndUpdate({ _id: Types.ObjectId(id) }, { $pull: { watchlist: cryptoFavorite }})
+        .exec();
+      const { watchlist } = await this.userModel.findOne({ _id: Types.ObjectId(id) }).exec();
+      return watchlist;
+    } catch (err) {
+      throw new NotFoundException(err, 'The favorite list not found or problems with DB');
     }
   }
 }

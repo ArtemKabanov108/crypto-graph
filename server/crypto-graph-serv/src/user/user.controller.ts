@@ -1,9 +1,11 @@
 import {
-  BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
-  HttpStatus, Req,
+  HttpStatus,
+  Post,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -12,18 +14,17 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ValidationErrorObject } from '../common/objects/ValidationErrorObject';
 import { UserService } from './services/user.service';
-import { UserRequest } from '../common/decorators/auth-request.decorator';
-import { LoginDto } from '../auth/dto/auth.dto';
-import {IJwtUser} from "../common/interfaces";
-import {IncomingMessage} from "http";
+import { IRequestWithUser } from '../common/interfaces';
+import { favoritesDto } from './dto/user.dto';
+import { ValidationUserResponse } from '../common/objects/userResponse';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly getUserFavorites: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
-  @Get('/favorites')
+  @Get('/get-favorite')
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Logged user.' })
+  @ApiOperation({ summary: 'Get list favorite cryptocurrency.' })
   @ApiResponse({
     status: 400,
     description: 'Bad request error',
@@ -36,14 +37,54 @@ export class UserController {
   })
   async getFavorites(
     @Res() response: Response,
-    @Req() request: any,
-  ): Promise<any> {
-    const favorites = await this.getUserFavorites.getFavoriteList(
-      request.user.email,
-    );
-    if (!favorites) {
-      throw new BadRequestException(['Register Error']);
-    }
+    @Req() request: IRequestWithUser,
+  ): Promise<Response> {
+    const favorites = await this.userService.getFavoriteList(request.user.id);
+    return response.status(HttpStatus.OK).json(favorites);
+  }
+
+  @Post('/set-favorite')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Add favorite cryptocurrency.' })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request error',
+    type: ValidationErrorObject,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The favorite cryptocurrency - added!',
+    type: ValidationUserResponse,
+  })
+  async setFavorite(
+    @Res() response: Response,
+    @Req() request: IRequestWithUser,
+    @Body() body: favoritesDto,
+  ): Promise<Response> {
+    console.log('00000000000', body);
+    const favorites = await this.userService.setFavorite(request.user.id, body.cryptoName);
+    return response.status(HttpStatus.OK).json(favorites);
+  }
+
+  @Delete('/delete-favorite')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Delete the favorite cryptocurrency.' })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request error',
+    type: ValidationErrorObject,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The favorite cryptocurrency - deleted!',
+    type: ValidationUserResponse,
+  })
+  async deleteFavorite(
+    @Res() response: Response,
+    @Req() request: IRequestWithUser,
+    @Body() body: favoritesDto,
+  ): Promise<Response> {
+    const favorites = await this.userService.deleteFavoriteCrypto(request.user.id, body.cryptoName);
     return response.status(HttpStatus.OK).json(favorites);
   }
 }

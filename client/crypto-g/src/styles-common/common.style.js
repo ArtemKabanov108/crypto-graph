@@ -3,6 +3,7 @@ export const colors = {
     textForInput: '#fff',
     transparentBackground: 'rgba( 255, 255, 255, 0.10 )',
     transparentBackgroundZero: 'rgba( 255, 255, 255, 0 )',
+    textForLabels: `#9ea7c4`,
     fireHover: `hover { 
                         color: #dc00c3;
                         font-weight: 550;

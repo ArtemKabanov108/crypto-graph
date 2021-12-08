@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema, User } from './schemas/user-schema';
+import { UserSchema, User } from '../auth/schemas/user-schema';
 import { UserService } from './services/user.service';
-import { JwtSchema, JwtRefreshToken } from './schemas/jwt-session-schema';
+import { JwtSchema, JwtRefreshToken } from '../auth/schemas/jwt-session-schema';
 
 @Module({
   imports: [

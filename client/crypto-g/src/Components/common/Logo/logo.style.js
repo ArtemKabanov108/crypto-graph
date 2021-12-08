@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const LogoContainer = styled.div`
-  margin: 2% 0 0 2%;
+  margin: 2% 0 0 4%;
   color: #ff96ff;
   font-family: 'Bungee Outline', cursive;
   font-weight: 600;

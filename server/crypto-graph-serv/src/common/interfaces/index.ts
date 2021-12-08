@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { User } from '../../user/schemas/user-schema';
+import { User } from '../../auth/schemas/user-schema';
 
 export interface ISession {
   sessionId: string;
@@ -8,12 +8,12 @@ export interface ISession {
 }
 
 export interface IRegistrationResponse {
-  getedUser: User;
+  receivedUser: User;
   accessToken: string;
 }
 
 export interface IUserList {
-  email: string;
+  userId: string;
   watchlist: string[];
 }
 
@@ -23,16 +23,15 @@ export interface IUser {
 }
 
 export interface IJwtRefreshToken {
-  sessionId: string;
-  createdAt: string;
-  expiresAt: string;
-  // status: SessionStatus
+  userId: string;
+  iat: number;
+  exp: number;
 }
 
 //Jwt interface for strategy and etc.
 export interface IJwtUser {
   userId: string;
-  password: string
+  password: string;
 }
 //Jwt payload interface
 export interface IJwtPayload extends IJwtUser {
@@ -40,11 +39,97 @@ export interface IJwtPayload extends IJwtUser {
   exp: number;
 }
 
-export interface IRequestWithUser extends Request {
-  user: User;
+export interface IRequestWithUser {
+  user: {
+    id: string;
+    nickname: string;
+  };
+}
+
+export interface IResponseJWTStrategy {
+  id: string;
+  nickname: string;
+}
+
+export interface IRequestUser extends Request {
+  user: {
+    userId: string;
+    refreshToken: string;
+  };
 }
 
 export interface ITokenPayload {
   userId: number;
   isSecondFactorAuthenticated?: boolean;
+}
+
+export interface ILogin {
+  LoggedUser: User;
+  tokenRefresh: string;
+}
+
+export interface IMessage {
+  message: string;
+}
+
+export interface IParamsCrypto {
+  vs_currency: string;
+  from: number;
+  to: number;
+}
+
+export interface IGeckoResponce {
+  /**
+   * Whether the response status code returned a successful code (>200 && <300).
+   */
+  success: boolean;
+  /**
+   * The response status message
+   */
+  message: string;
+  /**
+   * The response status code
+   */
+  code: number;
+  /**
+   * The body data in JSON format from the request.
+   */
+  data: any;
+}
+
+export interface IParseData {
+  id: string;
+  symbol: string;
+  image: {
+    thumb: string;
+    small: string;
+    large: string;
+  };
+  current_price: {
+    [key: string]: string;
+  };
+  market_cap: {
+    [key: string]: string;
+  };
+}
+
+export interface IWeek {
+  x: string;
+  y: number;
+}
+
+export interface ICurrencyCalculation {
+  coin: string;
+  success: string;
+  message: string;
+  code: number;
+  data: {
+    price_average: IWeek;
+    market_cap_average: IWeek;
+  };
+}
+
+export class RegisterRoutResponse {
+  jwt: string;
+  email: string;
 }
