@@ -147,7 +147,7 @@ export class AuthController {
     description: 'Success login',
     type: SuccessSessionResponseObject,
   })
-  async getAccessWithJWT(
+  getAccessWithJWT(
     @Body() body: JwtAccessDto,
     @Res() response: Response,
     @Req() request: IRequestWithUser,

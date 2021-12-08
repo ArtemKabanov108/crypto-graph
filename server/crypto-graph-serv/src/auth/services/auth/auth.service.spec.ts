@@ -17,33 +17,29 @@ import { createValidationSchema } from '../../../config/validation.schemsConfig'
 import { LocalStrategy } from '../../strategies/local.strategy';
 import { JwtStrategy } from '../../strategies/jwt-auth.stategy';
 import { JwtRefreshTokenStrategy } from '../../strategies/jwt-refresh.strategy';
-import {
-  BadRequestException,
-  ConflictException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
 describe('AuthService', () => {
   let service: AuthService;
   const mockUserData = {
-    register: jest.fn().mockImplementation((dto: RegisterDto) => {
+    register: jest.fn().mockImplementation((userRegisterData: RegisterDto) => {
       return {
-        ...dto,
+        ...userRegisterData,
       };
     }),
-    login: jest.fn().mockImplementation((dto: LoginDto) => {
+    login: jest.fn().mockImplementation((userLoginData: LoginDto) => {
       return {
-        ...dto,
+        ...userLoginData,
       };
     }),
-    create: jest.fn().mockImplementation((dto: CreateUserDto) => {
+    create: jest.fn().mockImplementation((createUser: CreateUserDto) => {
       return {
-        ...dto,
+        ...createUser,
       };
     }),
     save: jest
       .fn()
-      .mockImplementation((user) =>
+      .mockImplementation((user: User) =>
         Promise.resolve({ _id: Types.ObjectId(), ...user }),
       ),
   };
@@ -57,7 +53,7 @@ describe('AuthService', () => {
     save: jest
       .fn()
       .mockImplementation((user) =>
-        Promise.resolve({ _id: Types.ObjectId('45587'), ...user }),
+        Promise.resolve({ _id: Types.ObjectId(), ...user }),
       ),
   };
 

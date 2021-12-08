@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  ConflictException,
   Injectable,
   NotFoundException,
   ServiceUnavailableException,
@@ -36,26 +35,11 @@ export class AuthService {
     private readonly jwtModel: Model<JwtRefreshDocument>,
   ) {}
 
-  //ENV data for OKTA
-  // orgUrl = this.configService.get<string>('OKTA_DOMAIN')
-  // token = this.configService.get<string>('OKTA_APP_TOKEN')
-  // clientOktaId= this.configService.get<string>('CLIENT_ID')
-
-  // oktaClient = new OktaClient({
-  //     orgUrl: this.orgUrl,
-  //     token: this.token,
-  //     clientId: this.clientOktaId
-  // });
-  // oktaAuthClient = new OktaAuth({
-  //     // Required config
-  //     issuer: `${this.orgUrl}/oauth2/default`,
-  //     clientId: this.clientOktaId
-  // });
-
   async register(registerData: RegisterDto): Promise<IRegistrationResponse> {
     const { nickname, email, password } = registerData;
     const saltOrRounds = 10;
     const hash = await bcrypt.hash(password, saltOrRounds);
+
     //TODO oAuth Google
     // try {
     //     await this.oktaClient.createUser({
@@ -66,18 +50,15 @@ export class AuthService {
     //     throw new BadRequestException([e.message]);
     // }
 
-    //TODO UserService create new User
     try {
       //TODO
       // const {user:{id, profile:{firstName, lastName}, }} = await this.oktaAuthClient.signIn({username: email, password});
+
       const userExists = await this.userExists(email);
       if (userExists) {
         throw new UnauthorizedException({
           message: `User with this email exist. Pleas using different email.`,
         });
-        // return {
-        //   massage: `User with ${getedUser.email} exist. Pleas using different email.`,
-        // };
       } else {
         await this.create({
           _id: Types.ObjectId(),
@@ -110,7 +91,6 @@ export class AuthService {
 
   async login(loginData: LoginDto): Promise<ILogin> {
     const { email, password } = loginData;
-    console.log(email, password)
     try {
       //TODO OAuth 2.0 wit google
       // let {sessionToken} = await this.oktaAuthClient.signIn({username: email, password});
@@ -122,6 +102,7 @@ export class AuthService {
       //     status
       // } = await this.oktaClient.createSession({sessionToken});
       // let {profile} = await this.oktaClient.getUser(userId)
+
       const user = await this.userService.findByEmail(email);
       const isMatch = await this.isMatchPassword(password, user.password);
       if (isMatch) {
@@ -169,7 +150,6 @@ export class AuthService {
 
   public getCookieWithJwtRefreshToken(userId: Types.ObjectId) {
     const payload = { userId };
-    // console.log('getCookieWithJwtRefreshToken', { payload });
     const token = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_REFRESH_SECRET'),
       expiresIn: `${this.configService.get('JWT_REFRESH_EXPIRESIN')}s`,

@@ -128,3 +128,8 @@ export interface ICurrencyCalculation {
     market_cap_average: IWeek;
   };
 }
+
+export class RegisterRoutResponse {
+  jwt: string;
+  email: string;
+}
