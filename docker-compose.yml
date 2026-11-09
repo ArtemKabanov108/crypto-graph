@@ -3,8 +3,8 @@ services:
   nodeclient:
     container_name: nodeclient
     build:
-      context: ./client
-      dockerfile: client/crypto-g/docker/cli/Dockerfile
+      context: ./client/crypto-g
+      dockerfile: docker/cli/Dockerfile
     restart: always
     ports:
         - "4000:3000"
@@ -18,8 +18,8 @@ services:
   nodeserv:
     container_name: nestserv
     build:
-      context: ./server
-      dockerfile: server/crypto-graph-serv/docker/serv/Dockerfile
+      context: ./server/crypto-graph-serv
+      dockerfile: docker/serv/Dockerfile
     restart: always
     ports:
         - "4100:7100"
